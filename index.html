@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gebärden-Lern-App</title>
+    <link rel="manifest" href="manifest.json" />
+    <style>
+      body {
+        font-family: sans-serif;
+        text-align: center;
+        margin: 30px;
+        background: #fafafa;
+      }
+      #card {
+        font-size: 2em;
+        margin: 20px;
+        padding: 20px;
+        border-radius: 12px;
+        display: inline-block;
+        background: white;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      button {
+        font-size: 1.5em;
+        margin: 5px;
+        padding: 10px 20px;
+        border-radius: 10px;
+        border: none;
+        cursor: pointer;
+      }
+      button:hover {
+        opacity: 0.85;
+      }
+      #ok {
+        background: #b4ecb4;
+      }
+      #maybe {
+        background: #ffecb3;
+      }
+      #no {
+        background: #f9b5b5;
+      }
+      #solution {
+        background: #d0d0ff;
+        margin-bottom: 15px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Gebärden-Lern-App</h1>
+
+    <div id="card">Lade...</div>
+    <br />
+
+    <button id="no" onclick="mark('x')">❌</button>
+    <button id="maybe" onclick="mark('?')">❔</button>
+    <button id="ok" onclick="mark('ok')">✔️</button>
+
+    <p id="progress" style="margin-top: 1rem; font-size: 0.9rem; color: #555">Noch ... Gebärden zu lernen</p>
+    <button onclick="resetProgress()" style="margin-top: 0.5rem; background: #74c0fc; color: white; font-size: 1rem; padding: 0.4rem 1rem; border: none; border-radius: 0.5rem">Fortschritt zurücksetzen</button>
+
+    <!-- Vokabeln direkt im Dokument -->
+    <script id="vokabeln" type="text/plain">
+      Abend
+      Abendessen
+      Achso
+      Alt
+      Ampel
+      Anstrengend
+      April
+      Arbeiten
+      Arzt/Ärztin
+      Aufstehen
+      Aufwachen
+      Aufwachsen
+      August
+      Auto
+      Bahn
+      Bahnhof
+      Bank
+      Basiskommunikation
+      Basketball
+      Basteln
+      Baum
+      Baum
+      Beginn
+      BetreuerIn
+      Bier
+      Billig
+      Biologie
+      Bis bald
+      Bis morgen
+      Bis später
+      Bitte
+      Blau
+      Bleistift
+      Blond
+      Bluse
+      Böse
+      Brauche
+      Braun
+      Braunau
+      Bregenz
+      Brücke
+      Bruder
+      Bub
+      Buch
+      Burgenland
+      Bus
+      Bus
+      Chemie
+      Cola
+      Computer
+      Danke
+      Darf
+      Deutsch
+      Dezember
+      Dienstag
+      Diese
+      DolmetscherIn
+      Donner
+      Donnerstag
+      Dumm
+      Durst
+      Duschen
+      Eferding
+      Einfach
+      Einkaufszentrum
+      Eisenstadt
+      Eishockey
+      Eisig
+      Eislaufen
+      Eltern
+      Ende
+      Englisch
+      Enkelkinder
+      Entschuldigung
+      Fahrrad
+      Farbstift
+      Faul
+      Februar
+      Fisch
+      Fleissig
+      Flugzeug
+      Formel 1
+      Frage
+      Frankfurter
+      Frau
+      Freistadt
+      Freitag
+      Freuen
+      Freunde
+      FriseurIn
+      Früher
+      Frühling
+      Frühstück
+      Fussball
+      Fussball
+      Fussgänger
+      Garten
+      GärtnerIn
+      Gebärden
+      Geboren
+      Gehörlos
+      Gelb
+      Gerne
+      Geschichte
+      Geschieden
+      Geschwister
+      Gestern
+      Gewitter
+      Gmunden
+      Golf
+      Grad
+      Grad
+      Grau
+      Grauslich
+      Graz
+      Grieskirchen
+      Groß
+      Grosseltern
+      Grün
+      Gscheit
+      Gut
+      Gymnastik
+      Hagel
+      Hamburger
+      Handschuhe
+      Handy
+      Hart
+      Hassen
+      Hässlich
+      Haube
+      Heiss
+      Herbst
+      Heuer
+      Heute
+      Hörend
+      Hübsch
+      Hundert
+      Hunger
+      Hut
+      Innsbruck
+      Interessant
+      Jacke
+      Jänner
+      Jeans
+      Jetzt
+      Juli
+      Juni
+      Kaffee
+      Kaffeehaus
+      Kalt
+      Kalt
+      Kann
+      Karate
+      Kärnten
+      Karten spielen
+      Kennen
+      Kinder
+      Kirchdorf
+      Kirche
+      Klagenfurt
+      Klammermaschine
+      Kleber
+      Kleid
+      Klein
+      Klettern
+      Kommen aus
+      Köstlich
+      Krankenhaus
+      Kucen
+      Kuchen
+      Kugelschreiber
+      Kühl
+      Langsam
+      Laut
+      Leben
+      Ledig
+      Leggins
+      LehrerIn
+      Leicht
+      Leihen
+      Lernen
+      Lesen
+      Letzte
+      Leuchtstift
+      Lieb
+      Lieblings
+      Lineal
+      Linz
+      Linz-Land
+      Mädchen
+      Mai
+      Malen
+      Mann
+      Mantel
+      Mappe
+      März
+      Mathematik
+      Milch
+      Million
+      Mineralwasser Wasser
+      Minute
+      Mit
+      Mittag
+      Mittagessen
+      Mittwoch
+      Möchte/Mag
+      Moment
+      Montag
+      Moped
+      Morgen
+      Motorrad
+      Müde
+      Musik hören
+      Muss
+      Mutter
+      Nach Hause
+      Nachmittag
+      Nächste
+      Nächstes Jahr
+      Nacht
+      Nass
+      Nebel
+      Neu
+      Nicht
+      Niederösterreich
+      November
+      Oberösterreich
+      Ohne
+      Ok
+      Oktober
+      Oma
+      Opa
+      Oragensaft
+      Orange
+      Pantoffel
+      Papier
+      Passt
+      Pause
+      Perg
+      Physik
+      Pizza
+      Polizei
+      PolizistIn
+      Pommes
+      Pulli
+      Pünktlich
+      Putzfrau/mann
+      Radfahren
+      Radiergummi
+      Radio
+      Red Bull
+      Regen
+      Regenbogen
+      Religion
+      Ried
+      Rock
+      Rohrbach
+      Rot
+      Salat
+      Salzburg
+      Samstag
+      Satt
+      Sauber
+      Schall
+      Schärding
+      ScheiderIn
+      Schere
+      Schiff
+      Schlafen
+      Schlecht
+      Schmutzig
+      Schnee
+      Schnell
+      Schön
+      Schuhe
+      Schule
+      Schwarz
+      Schwer
+      Schwerhörig
+      Schwester
+      Schwimmen
+      Sehr Gut
+      SekretärIn
+      Sekunde
+      Semmel
+      September
+      Skifahren
+      Skitouren
+      Socken
+      Sohn
+      Soll
+      Sommer
+      Sonne
+      Sonntag
+      Spaghetti
+      Spazieren
+      Spitzer
+      Sport
+      Sportschuhe
+      St Pölten
+      Stau
+      Steiermark
+      Steyr
+      Steyr-Land
+      Stiefel
+      Strasse
+      Strassenbahn
+      Strumpfhose
+      Stunde
+      T-Shirt
+      Tankstelle
+      Tasche
+      Taschenrechner
+      Tausend
+      TechnikerIn
+      Tee
+      Tennis
+      Teuer
+      Tirol
+      TischlerIn
+      Tischtennis
+      Tixo
+      Tochter
+      Torte
+      Trocken
+      Tunnel
+      Turnen
+      Üben
+      Übermorgen
+      Unterhose
+      Urfahr
+      Urfahr-Umgebung
+      Vater
+      Vergessen
+      Verheiratet
+      Verheiratet
+      Verschlafen
+      Viel
+      Vöcklabruck
+      Volleyball
+      Vor Jahr
+      Vor Woche
+      Vorarlberg
+      Vorgestern
+      Vormittag
+      Wandern
+      Wann?
+      Warm
+      Warum?
+      Was?
+      WC
+      Weich
+      Wein
+      Weiß
+      Wels
+      Wels-Land
+      Wenig
+      Wer?
+      Wie lange?
+      Wie viel?
+      Wiederholen
+      Wien
+      Will
+      Wind
+      Winter
+      Wo?
+      Wohnen
+      Wolken
+      Zirkel
+      zu spät
+      Zucker
+    </script>
+
+    <!-- App-Logik -->
+    <script src="script.js"></script>
+
+    <script>
+      // PWA-ServiceWorker registrieren (optional, serverfrei möglich über localhost oder https)
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("service-worker.js").catch(console.error);
+      }
+    </script>
+  </body>
+</html>

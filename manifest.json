@@ -1,0 +1,9 @@
+{
+  "name": "Gebärden Lernen",
+  "short_name": "Gebärden",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4a90e2",
+  "icons": []
+}
