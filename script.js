@@ -81,5 +81,6 @@ function resetProgress() {
   if (confirm("Willst du wirklich den Lernfortschritt zurücksetzen?")) {
     localStorage.removeItem("learnedWords");
     location.reload();
+    updateProgress();
   }
 }
