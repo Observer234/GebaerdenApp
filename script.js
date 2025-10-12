@@ -37,7 +37,8 @@ function showWord() {
 function showSolution() {
   const baseURL = "https://gebaerden-archiv.at/search?q=";
   const currentWord = pool[currentIndex];
-  window.open(baseURL + encodeURIComponent(currentWord) + "&tag=", "_blank");
+  const formattedWord = currentWord.trim().replace(/\s+/g, "+"); // ersetzt Leerzeichen durch +
+  window.open(baseURL + formattedWord + "&tag=", "_blank");
 }
 
 // ======= Klick-Logik =======
