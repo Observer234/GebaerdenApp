@@ -17,3 +17,17 @@ self.addEventListener("fetch", e => {
     caches.match(e.request).then(response => response || fetch(e.request))
   );
 });
+
+
+// Cache Problematik
+self.addEventListener("install", event => {
+  self.skipWaiting(); // alte Version sofort ersetzen
+});
+
+self.addEventListener("activate", event => {
+  event.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(keys.map(key => caches.delete(key))) // Cache leeren
+    )
+  );
+});

@@ -79,9 +79,15 @@ function updateProgress() {
 }
 
 function resetProgress() {
-  if (confirm("Willst du wirklich den Lernfortschritt zurücksetzen?")) {
+  if (confirm("Willst du deinen Fortschritt wirklich zurücksetzen?")) {
     localStorage.removeItem("learnedWords");
-    location.reload();
+
+    // Neu initialisieren:
+    const rawText = document.getElementById("vokabeln").textContent.trim();
+    allWords = rawText.split("\n").map(w => w.trim()).filter(Boolean);
+    pool = shuffle([...allWords]);
+
     updateProgress();
+    showWord();
   }
 }
