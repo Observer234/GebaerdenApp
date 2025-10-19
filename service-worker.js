@@ -2,7 +2,6 @@ const CACHE_NAME = "vokabeltrainer-cache-v2"; // erhöhe Version bei Änderungen
 const OFFLINE_URLS = [
   "/", 
   "/index.html",
-  "/style.css",
   "/script.js",
   "/favicon-16x16.png",
   "/favicon-32x32.png",
