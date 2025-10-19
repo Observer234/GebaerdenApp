@@ -105,6 +105,7 @@ function updateProgress() {
 function resetProgress() {
   if (confirm("Willst du deinen Fortschritt wirklich zurücksetzen?")) {
     localStorage.removeItem("learnedWords");
+    pool = allWords;
 
     // Neu initialisieren:
     // const rawText = document.getElementById("vokabeln").textContent.trim();
