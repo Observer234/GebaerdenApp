@@ -21,25 +21,13 @@ let allWords = [];
 
 loadWordsFromSheet(sheetId).then((words) => {
   allWords = words;
-
-  // Alles, was auf allWords zugreift, hier rein
   console.log("Array ist fertig:", allWords);
   startApp();
 });
 
 function startApp() {
-  // hier kannst du allWords *synchron* verwenden
-  console.log("Wir können jetzt alle Wörter nutzen:", allWords);
 
-  // fetch(url)
-  //   .then((res) => res.text())
-  //   .then((text) => {
-  //     const json = JSON.parse(text.substr(47).slice(0, -2));
-  //     const rows = json.table.rows.map((r) => r.c.map((c) => c?.v ?? null));
-  //     console.log(rows);
-  //   });
-
-  // ======= Vokabeln laden =======
+  // ======= Vokabeln laden aus html =======
   // const rawText = document.getElementById("vokabeln").textContent.trim();
 
   // let allWords = rawText
