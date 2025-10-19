@@ -27,6 +27,7 @@ loadWordsFromSheet(sheetId).then((words) => {
 
 let pool = [];
 let currentIndex = 0;
+const learned = [];
 
 function startApp() {
   // ======= Vokabeln laden aus html =======
@@ -38,7 +39,7 @@ function startApp() {
   //   .filter(Boolean);
 
   // ======= LocalStorage Fortschritt =======
-  const learned = JSON.parse(localStorage.getItem("learnedWords") || "[]");
+  learned = JSON.parse(localStorage.getItem("learnedWords") || "[]");
   pool = allWords.filter((w) => !learned.includes(w));
 
   pool = shuffle(pool);
