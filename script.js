@@ -1,3 +1,13 @@
+const url = "https://docs.google.com/spreadsheets/d/1u4BzQWOe-sYXdl1-gr9IMC2LK1lL-2NSrzRCf2CGwKo/gviz/tq?tqx=out:json";
+
+fetch(url)
+  .then((res) => res.text())
+  .then((text) => {
+    const json = JSON.parse(text.substr(47).slice(0, -2));
+    const rows = json.table.rows.map((r) => r.c.map((c) => c?.v ?? null));
+    console.log(rows);
+  });
+
 // ======= Vokabeln laden =======
 const rawText = document.getElementById("vokabeln").textContent.trim();
 
@@ -84,7 +94,10 @@ function resetProgress() {
 
     // Neu initialisieren:
     const rawText = document.getElementById("vokabeln").textContent.trim();
-    allWords = rawText.split("\n").map(w => w.trim()).filter(Boolean);
+    allWords = rawText
+      .split("\n")
+      .map((w) => w.trim())
+      .filter(Boolean);
     pool = shuffle([...allWords]);
 
     updateProgress();
