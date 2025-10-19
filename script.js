@@ -27,7 +27,7 @@ loadWordsFromSheet(sheetId).then((words) => {
 
 let pool = [];
 let currentIndex = 0;
-const learned = [];
+let learned = [];
 
 function startApp() {
   // ======= Vokabeln laden aus html =======
