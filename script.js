@@ -1,4 +1,3 @@
-// const url = "https://docs.google.com/spreadsheets/d/1u4BzQWOe-sYXdl1-gr9IMC2LK1lL-2NSrzRCf2CGwKo/gviz/tq?tqx=out:json";
 sheetId = "1u4BzQWOe-sYXdl1-gr9IMC2LK1lL-2NSrzRCf2CGwKo";
 
 async function loadWordsFromSheet(sheetId) {
