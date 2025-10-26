@@ -29,6 +29,84 @@ let pool = [];
 let currentIndex = 0;
 let learned = [];
 
+// === Streak-System ===
+
+// beim Laden prüfen
+updateStreakDisplay();
+
+function updateStreakDisplay() {
+  const today = new Date().toDateString();
+  const last = localStorage.getItem("lastActiveDate");
+  const streak = parseInt(localStorage.getItem("streakCount") || 0);
+  const learnedToday = parseInt(localStorage.getItem("todayLearnedCount") || 0);
+
+  let text = `🔥 Serie: ${streak} Tag${streak === 1 ? "" : "e"}`;
+  if (learnedToday < 10) {
+    text += ` – (${learnedToday}/10 Wörter heute)`;
+  } else {
+    text += ` ✅`;
+  }
+
+  document.getElementById("streak").textContent = text;
+
+  // Reset täglicher Zähler, wenn neuer Tag
+  if (last && last !== today) {
+    localStorage.setItem("todayLearnedCount", "0");
+  }
+}
+
+// Diese Funktion wird aufgerufen, wenn Nutzer auf "✅" klickt
+function mark(status) {
+  if (status === "ok") {
+    incrementLearnedToday();
+  }
+
+  // deine bestehende Logik hier weiterführen
+  // z. B. nextWord(), saveProgress(), etc.
+}
+
+function incrementLearnedToday() {
+  const today = new Date().toDateString();
+  const last = localStorage.getItem("lastActiveDate");
+  let streak = parseInt(localStorage.getItem("streakCount") || 0);
+  let learnedToday = parseInt(localStorage.getItem("todayLearnedCount") || 0);
+
+  learnedToday++;
+  localStorage.setItem("todayLearnedCount", learnedToday.toString());
+
+  // Wenn 10 Wörter gelernt: Tag gilt als erfüllt
+  if (learnedToday === 10) {
+    if (last && last !== today) {
+      // Wenn gestern aktiv -> Streak fortsetzen
+      const diffDays = (new Date(today) - new Date(last)) / 86400000;
+      if (diffDays === 1) {
+        streak += 1;
+      } else {
+        streak = 1;
+      }
+    } else if (!last || last === today) {
+      // erster Tag oder am selben Tag neu
+      if (streak === 0) streak = 1;
+    }
+
+    localStorage.setItem("streakCount", streak);
+    localStorage.setItem("lastActiveDate", today);
+
+    // kleine visuelle Belohnung
+    const el = document.getElementById("streak");
+    el.textContent = `🔥 Serie: ${streak} Tage – Ziel erreicht 🎉`;
+    el.style.color = "#ff7b00";
+    el.style.transition = "transform 0.4s ease";
+    el.style.transform = "scale(1.2)";
+    setTimeout(() => {
+      el.style.transform = "scale(1)";
+      el.style.color = "#f76d00";
+    }, 800);
+  }
+
+  updateStreakDisplay();
+} // Streak End
+
 function startApp() {
   // ======= Vokabeln laden aus html =======
   // const rawText = document.getElementById("vokabeln").textContent.trim();
