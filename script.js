@@ -103,7 +103,7 @@ function updateProgress() {
 }
 
 function resetProgress() {
-  if (confirm("Willst du deinen Fortschritt wirklich zurücksetzen?")) {
+  if (confirm("⚠️ Willst du deinen Fortschritt wirklich zurücksetzen? ⚠️")) {
     localStorage.removeItem("learnedWords");
     learned = [];
     pool = allWords.filter((w) => !learned.includes(w));
