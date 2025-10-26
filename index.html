@@ -52,6 +52,52 @@
         background: #d0d0ff;
         margin-bottom: 15px;
       }
+
+      /* Modal Hintergrund */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 100;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+      }
+
+      /* Modal Inhalt */
+      .modal-content {
+        background-color: #fff;
+        margin: 10% auto;
+        padding: 20px;
+        border-radius: 16px;
+        width: 90%;
+        max-width: 400px;
+        text-align: left;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      }
+
+      .modal-content h2 {
+        text-align: center;
+        margin-bottom: 10px;
+      }
+
+      .modal-content ul {
+        padding-left: 20px;
+      }
+
+      .close {
+        color: #aaa;
+        float: right;
+        font-size: 24px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      .close:hover {
+        color: #000;
+      }
     </style>
   </head>
   <body>
@@ -66,6 +112,22 @@
 
     <p id="progress" style="margin-top: 1rem; font-size: 0.9rem; color: #555">Noch ... Gebärden zu lernen</p>
     <button onclick="resetProgress()" style="margin-top: 0.5rem; background: #74c0fc; color: white; font-size: 1rem; padding: 0.4rem 1rem; border: none; border-radius: 0.5rem">Fortschritt zurücksetzen</button>
+
+    <p><a href="#" id="show-instructions">Anleitung</a></p>
+
+    <div id="instructions-modal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>App-Anleitung</h2>
+        <p>So verwendest du die Gebärden-Lern-App:</p>
+        <ul>
+          <li>⤼ <strong>Überspringen</strong> – Wenn du das Wort momentan nicht weißt und ohne Nachsehen weitermachen möchtest.</li>
+          <li>❓ <strong>Nachsehen</strong> – Öffnet die Gebärde auf <em>gebaerden-archiv.at</em>, um sie dir anzusehen.</li>
+          <li>✔️ <strong>Ich kann’s</strong> – Markiert das Wort als gelernt und zeigt das nächste an.</li>
+        </ul>
+        <p>Dein Fortschritt wird lokal im Browser gespeichert und bleibt beim nächsten Öffnen erhalten. Der Fortschritt geht nur verloren, wenn du deinen Browserverlauf löscht.</p>
+      </div>
+    </div>
 
     <!-- Vokabeln direkt im Dokument -->
     <script id="vokabeln" type="text/plain">

@@ -116,6 +116,26 @@ function resetProgress() {
   }
 }
 
+// Modal-Logik
+const modal = document.getElementById("instructions-modal");
+const btn = document.getElementById("show-instructions");
+const span = document.querySelector(".close");
+
+btn.onclick = function (e) {
+  e.preventDefault();
+  modal.style.display = "block";
+};
+
+span.onclick = function () {
+  modal.style.display = "none";
+};
+
+window.onclick = function (event) {
+  if (event.target === modal) {
+    modal.style.display = "none";
+  }
+};
+
 // ======= Optional: Service Worker =======
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker
