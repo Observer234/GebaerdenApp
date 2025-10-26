@@ -44,7 +44,7 @@ function updateStreakDisplay() {
   if (learnedToday < 10) {
     text += ` – (${learnedToday}/10 Wörter heute)`;
   } else {
-    text += ` Tagesziel erreicht 🎉`;
+    text += ` - Tagesziel erreicht 🎉`;
   }
 
   document.getElementById("streak").textContent = text;
