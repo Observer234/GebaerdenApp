@@ -55,16 +55,6 @@ function updateStreakDisplay() {
   }
 }
 
-// Diese Funktion wird aufgerufen, wenn Nutzer auf "✅" klickt
-function mark(status) {
-  if (status === "ok") {
-    incrementLearnedToday();
-  }
-
-  // deine bestehende Logik hier weiterführen
-  // z. B. nextWord(), saveProgress(), etc.
-}
-
 function incrementLearnedToday() {
   const today = new Date().toDateString();
   const last = localStorage.getItem("lastActiveDate");
@@ -158,6 +148,7 @@ function showSolution() {
 function mark(action) {
   const currentWord = pool[currentIndex];
   if (action === "ok") {
+    incrementLearnedToday();
     learned.push(currentWord);
     localStorage.setItem("learnedWords", JSON.stringify(learned));
     pool.splice(currentIndex, 1); // Wort entfernen
