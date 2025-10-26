@@ -124,17 +124,25 @@ const span = document.querySelector(".close");
 btn.onclick = function (e) {
   e.preventDefault();
   modal.style.display = "block";
+  document.body.style.overflow = "hidden";
 };
 
 span.onclick = function () {
   modal.style.display = "none";
+  document.body.style.overflow = "auto";
 };
 
 window.onclick = function (event) {
   if (event.target === modal) {
     modal.style.display = "none";
+    document.body.style.overflow = "auto";
   }
 };
+
+btn.addEventListener("touchstart", function (e) {
+  e.preventDefault();
+  modal.style.display = "block";
+});
 
 // ======= Optional: Service Worker =======
 if ("serviceWorker" in navigator) {
