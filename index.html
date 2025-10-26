@@ -68,6 +68,23 @@
         color: #0056b3;
       }
 
+      .level-btn {
+        background: #eaf4ff;
+        border: none;
+        border-radius: 8px;
+        margin: 0 4px;
+        padding: 6px 12px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .level-btn.active {
+        background: #74c0fc;
+        color: white;
+        font-weight: bold;
+      }
+
       /* Modal Hintergrund */
       .modal {
         display: none;
@@ -125,6 +142,12 @@
   <body>
     <h1>Gebärden-Lern-App</h1>
 
+    <!-- <div id="level-selector" style="margin-bottom: 1rem">
+      <button class="level-btn active" data-level="easy">Leicht</button>
+      <button class="level-btn" data-level="medium">Mittel</button>
+      <button class="level-btn" data-level="hard">Profi</button>
+    </div> -->
+
     <div id="card">Lade...</div>
     <br />
 
@@ -157,7 +180,9 @@
 
     <!-- Vokabeln direkt im Dokument -->
     <script id="vokabeln" type="text/plain">
-      TEST-VOCABS
+      TEST01
+      TEST02
+      TEST03
     </script>
 
     <!-- App-Logik -->
@@ -170,6 +195,5 @@
       }
     </script>
 
-    <!-- <p id="footer" style="margin-top: 2em; font-size: 0.8em; color: #777">Have fun</p> -->
   </body>
 </html>

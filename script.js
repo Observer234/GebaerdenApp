@@ -176,8 +176,9 @@ function resetProgress() {
     localStorage.removeItem("learnedWords");
     learned = [];
     pool = allWords.filter((w) => !learned.includes(w));
+    pool = shuffle(pool);
 
-    // Neu initialisieren:
+    // Neu initialisieren mit in-app Vokabeln:
     // const rawText = document.getElementById("vokabeln").textContent.trim();
 
     updateProgress();
