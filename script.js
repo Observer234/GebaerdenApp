@@ -183,8 +183,6 @@ function updateProgress() {
 function resetProgress() {
   if (confirm("⚠️ Willst du deinen Fortschritt wirklich zurücksetzen? ⚠️")) {
     localStorage.removeItem("learnedWords");
-    localStorage.removeItem("todayLearnedDate");
-    localStorage.removeItem("todayLearnedCount");
     learned = [];
     pool = allWords.filter((w) => !learned.includes(w));
     pool = shuffle(pool);
