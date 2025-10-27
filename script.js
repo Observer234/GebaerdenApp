@@ -37,52 +37,59 @@ updateStreakDisplay();
 function updateStreakDisplay() {
   const today = new Date().toDateString();
   const last = localStorage.getItem("lastActiveDate");
-  const streak = parseInt(localStorage.getItem("streakCount") || 0);
-  const learnedToday = parseInt(localStorage.getItem("todayLearnedCount") || 0);
+  const streak = parseInt(localStorage.getItem("streakCount") || "0");
+  const learnedToday = parseInt(localStorage.getItem("todayLearnedCount") || "0");
+  const learnedTodayDate = localStorage.getItem("todayLearnedDate"); // neu
 
-  let text = `🔥 Serie: ${streak} Tag${streak === 1 ? "" : "e"}`;
-  if (learnedToday < 10) {
-    text += ` – (${learnedToday}/10 Wörter heute)`;
-  } else {
-    text += ` - Tagesziel erreicht 🎉`;
-  }
-
-  document.getElementById("streak").textContent = text;
-
-  // Reset täglicher Zähler, wenn neuer Tag
-  if (last && last !== today) {
+  // Reset des Tageszählers nur, wenn der gespeicherte Zähler NICHT vom heutigen Datum ist
+  if (!learnedTodayDate || learnedTodayDate !== today) {
+    // falls kein Eintrag oder veralteter Eintrag, auf 0 setzen
     localStorage.setItem("todayLearnedCount", "0");
   }
+
+  // lese danach den (möglicherweise zurückgesetzten) Wert nochmal
+  const currentLearnedToday = parseInt(localStorage.getItem("todayLearnedCount") || "0");
+
+  let text = `🔥 Serie: ${streak} Tag${streak === 1 ? "" : "e"}`;
+  if (currentLearnedToday < 10) {
+    text += ` – (${currentLearnedToday}/10 Wörter heute)`;
+  } else {
+    text += ` ✅`;
+  }
+
+  const el = document.getElementById("streak");
+  if (el) el.textContent = text;
 }
 
 function incrementLearnedToday() {
   const today = new Date().toDateString();
   const last = localStorage.getItem("lastActiveDate");
   let streak = parseInt(localStorage.getItem("streakCount") || 0);
-  let learnedToday = parseInt(localStorage.getItem("todayLearnedCount") || 0);
+  let learnedToday = parseInt(localStorage.getItem("todayLearnedCount") || "0");
 
   learnedToday++;
   localStorage.setItem("todayLearnedCount", learnedToday.toString());
+  // wichtig: merken, an welchem Tag dieser Zähler gilt
+  localStorage.setItem("todayLearnedDate", today);
 
   // Wenn 10 Wörter gelernt: Tag gilt als erfüllt
   if (learnedToday === 10) {
+    // ... (bestehende Streak-Logik unverändert)
     if (last && last !== today) {
-      // Wenn gestern aktiv -> Streak fortsetzen
-      const diffDays = (new Date(today) - new Date(last)) / 86400000;
+      const diffDays = Math.round((new Date(today) - new Date(last)) / 86400000);
       if (diffDays === 1) {
         streak += 1;
       } else {
         streak = 1;
       }
     } else if (!last || last === today) {
-      // erster Tag oder am selben Tag neu
       if (streak === 0) streak = 1;
     }
 
-    localStorage.setItem("streakCount", streak);
+    localStorage.setItem("streakCount", streak.toString());
     localStorage.setItem("lastActiveDate", today);
 
-    // kleine visuelle Belohnung
+    // kleine visuelle Rückmeldung (optional)
     const el = document.getElementById("streak");
     el.textContent = `🔥 Serie: ${streak} Tage – Ziel erreicht 🎉`;
     el.style.color = "#ff7b00";
@@ -111,6 +118,8 @@ function startApp() {
   pool = allWords.filter((w) => !learned.includes(w));
 
   pool = shuffle(pool);
+
+  updateStreakDisplay();
 
   // ======= Start =======
   showWord();
@@ -174,6 +183,8 @@ function updateProgress() {
 function resetProgress() {
   if (confirm("⚠️ Willst du deinen Fortschritt wirklich zurücksetzen? ⚠️")) {
     localStorage.removeItem("learnedWords");
+    localStorage.removeItem("todayLearnedDate");
+    localStorage.removeItem("todayLearnedCount");
     learned = [];
     pool = allWords.filter((w) => !learned.includes(w));
     pool = shuffle(pool);
