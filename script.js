@@ -239,7 +239,7 @@ function updateProgress() {
       level = 6;
       emoji = "🥇🤩";
       message = `Meisterhaft! ${learned} Gebärden – du bist ein Gebärden-Pro!`;
-      bgColor = "linear-gradient(135deg, #ffd54f, #ffb300)";
+      bgColor = "linear-gradient(135deg, #ffb347, #ffcc33)"; // kräftiger Goldton
       break;
   }
 

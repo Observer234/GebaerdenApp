@@ -142,18 +142,22 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        margin: 1.5em 0;
+        justify-content: center;
+        margin: 2em auto; /* gleichmäßiger Abstand oben/unten */
         text-align: center;
-        transition: background 0.8s ease, transform 0.3s ease;
         border-radius: 1em;
-        padding: 1em;
+        padding: 1.2em 1.5em;
         color: #222;
+        width: fit-content; /* nur so breit wie Inhalt */
+        max-width: 90%; /* mobilfreundlich */
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        transition: background 0.8s ease, transform 0.3s ease;
       }
 
       #progress-emoji {
         font-size: 2.8rem;
         line-height: 1;
-        margin-bottom: 0.3em;
+        margin-bottom: 0.4em;
         transition: transform 0.4s ease, opacity 0.4s ease;
       }
 
@@ -164,7 +168,7 @@
 
       #progress-text {
         font-size: 1.1rem;
-        max-width: 80%;
+        max-width: 400px;
         line-height: 1.4;
       }
     </style>
