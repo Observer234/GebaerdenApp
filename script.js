@@ -32,22 +32,30 @@ let learned = [];
 // === Streak-System ===
 
 // beim Laden prüfen
-updateStreakDisplay();
+// updateStreakDisplay();
 
 function updateStreakDisplay() {
   const today = new Date().toDateString();
   const last = localStorage.getItem("lastActiveDate");
-  const streak = parseInt(localStorage.getItem("streakCount") || "0");
-  const learnedToday = parseInt(localStorage.getItem("todayLearnedCount") || "0");
-  const learnedTodayDate = localStorage.getItem("todayLearnedDate"); // neu
+  let streak = parseInt(localStorage.getItem("streakCount") || "0");
+  const learnedTodayDate = localStorage.getItem("todayLearnedDate");
+
+  // Falls mehrere Tage vergangen sind → Streak auf 0
+  if (last) {
+    const diffDays = Math.floor(
+      (new Date(today) - new Date(last)) / (1000 * 60 * 60 * 24)
+    );
+    if (diffDays > 1) {
+      streak = 0;
+      localStorage.setItem("streakCount", "0");
+    }
+  }
 
   // Reset des Tageszählers nur, wenn der gespeicherte Zähler NICHT vom heutigen Datum ist
   if (!learnedTodayDate || learnedTodayDate !== today) {
-    // falls kein Eintrag oder veralteter Eintrag, auf 0 setzen
     localStorage.setItem("todayLearnedCount", "0");
   }
 
-  // lese danach den (möglicherweise zurückgesetzten) Wert nochmal
   const currentLearnedToday = parseInt(localStorage.getItem("todayLearnedCount") || "0");
 
   let text = `🔥 Serie: ${streak} Tag${streak === 1 ? "" : "e"}`;
@@ -60,6 +68,7 @@ function updateStreakDisplay() {
   const el = document.getElementById("streak");
   if (el) el.textContent = text;
 }
+
 
 function incrementLearnedToday() {
   const today = new Date().toDateString();
@@ -174,10 +183,57 @@ function mark(action) {
   updateProgress();
 }
 
-function updateProgress() {
+function updateProgressDisplay() {
   const total = allWords.length;
   const remaining = pool.length;
-  document.getElementById("progress").textContent = `Noch ${remaining} von ${total} Gebärden zu lernen`;
+  const learned = total - remaining;
+
+  const emojiEl = document.getElementById("progress-emoji");
+  const textEl = document.getElementById("progress-text");
+
+  if (!emojiEl || !textEl) return;
+
+  let message = "";
+  let emoji = "";
+
+  switch (true) {
+    case learned === 0:
+      emoji = "🌱";
+      message = "Starte jetzt und erweitere deinen Wortschatz!";
+      break;
+    case learned < 10:
+      emoji = "👏";
+      message = `Toller Anfang! Du kennst schon ${learned} Gebärden.`;
+      break;
+    case learned < 50:
+      emoji = "🔥";
+      message = `Super! Dein Wortschatz wächst - ${learned} Gebärden schon gelernt.`;
+      break;
+    case learned < 100:
+      emoji = "🚀";
+      message = `Wow! ${learned} Gebärden - du wirst richtig sicher!`;
+      break;
+    case learned < 200:
+      emoji = "🏆";
+      message = `Stark! ${learned} Gebärden - beeindruckender Fortschritt!`;
+      break;
+    case learned < 500:
+      emoji = "🌟";
+      message = `Unglaublich! Du hast ${learned} Gebärden gemeistert!`;
+      break;
+    default:
+      emoji = "🥇🤩";
+      message = `Meisterhaft! ${learned} Gebärden – du bist ein Gebärden-Pro!`;
+      break;
+  }
+
+  // Text und Emoji aktualisieren
+  emojiEl.textContent = emoji;
+  textEl.textContent = message;
+
+  // Animation kurz triggern
+  emojiEl.classList.add("animate");
+  setTimeout(() => emojiEl.classList.remove("animate"), 400);
 }
 
 function resetProgress() {
