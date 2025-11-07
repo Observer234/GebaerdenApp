@@ -230,7 +230,7 @@ function updateProgress(testLevelLearned) {
     case learned < 200:
       level = 4;
       emoji = "🦜";
-      message = `Unglaublich! ${learned} Gebärden - dein Wortschatz wird bunter!`;
+      message = `${learned} Gebärden - dein Wortschatz wird immer bunter!`;
       bgColor = "linear-gradient(135deg, #fff59d, #fff176)";
       break;
     case learned < 300:
@@ -242,7 +242,7 @@ function updateProgress(testLevelLearned) {
     case learned < 400:
       level = 6;
       emoji = "🦖";
-      message = `Grrrr ${learned} Gebärden - keine Angst, weiter so!`;
+      message = `Grrrr ${learned} Gebärden - du machst riesige Schritte!`;
       bgColor = "linear-gradient(135deg, #fff59d, #fff176)";
       break;
     case learned < 500:
