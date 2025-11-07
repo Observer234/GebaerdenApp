@@ -249,7 +249,7 @@ function updateProgress(testLevelLearned) {
       level = 7;
       emoji = "🦄";
       message = `Mystisch! Du hast ${learned} Gebärden gemeistert!`;
-      bgColor = "linear-gradient(135deg, #d1a5d9ff, #ba68c8)";
+      bgColor = "linear-gradient(135deg, #c9f5d7ff, #98cccaff)";
       break;
     default:
       level = 8;
