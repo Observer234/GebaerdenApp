@@ -183,7 +183,7 @@ function mark(action) {
   updateProgress();
 }
 
-function updateProgressDisplay() {
+function updateProgress() {
   const total = allWords.length;
   const remaining = pool.length;
   const learned = total - remaining;
