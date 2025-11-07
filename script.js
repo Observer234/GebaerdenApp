@@ -187,7 +187,7 @@ function updateProgress(testLevelLearned) {
   const remaining = pool.length;
   let learned = total - remaining;
 
-  if(testLevelLearned) {
+  if (testLevelLearned) {
     learned = testLevelLearned;
   }
 
@@ -203,7 +203,7 @@ function updateProgress(testLevelLearned) {
   let bgColor = "";
 
   switch (true) {
-    case learned < 5:
+    case learned < 2:
       level = 0;
       emoji = "🌱";
       message = "Starte jetzt und erweitere deinen Wortschatz!";
@@ -229,7 +229,7 @@ function updateProgress(testLevelLearned) {
       break;
     case learned < 200:
       level = 4;
-      emoji = "💯";
+      emoji = "🦚";
       message = `Stark! ${learned} Gebärden - beeindruckender Fortschritt!`;
       bgColor = "linear-gradient(135deg, #fff59d, #fff176)";
       break;
@@ -243,7 +243,7 @@ function updateProgress(testLevelLearned) {
       level = 6;
       emoji = "🐦‍🔥"; // 🥇🤩💯🕺💃🤟🐦‍🔥🦚🤺🌟💫
       message = `Meisterhaft! ${learned} Gebärden - du bist ein Gebärden-Pro!`;
-      bgColor = "linear-gradient(135deg, #fdd55cff, #ff8447ff)"; // kräftiger Goldton
+      bgColor = "linear-gradient(135deg, #fdd55cff, #bbdefb)"; // kräftiger Goldton
       break;
   }
 
