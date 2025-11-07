@@ -199,7 +199,7 @@ function updateProgress() {
   let bgColor = "";
 
   switch (true) {
-    case learned === 0:
+    case learned < 5:
       level = 0;
       emoji = "🌱";
       message = "Starte jetzt und erweitere deinen Wortschatz!";
