@@ -42,9 +42,7 @@ function updateStreakDisplay() {
 
   // Falls mehrere Tage vergangen sind → Streak auf 0
   if (last) {
-    const diffDays = Math.floor(
-      (new Date(today) - new Date(last)) / (1000 * 60 * 60 * 24)
-    );
+    const diffDays = Math.floor((new Date(today) - new Date(last)) / (1000 * 60 * 60 * 24));
     if (diffDays > 1) {
       streak = 0;
       localStorage.setItem("streakCount", "0");
@@ -68,7 +66,6 @@ function updateStreakDisplay() {
   const el = document.getElementById("streak");
   if (el) el.textContent = text;
 }
-
 
 function incrementLearnedToday() {
   const today = new Date().toDateString();
@@ -183,6 +180,8 @@ function mark(action) {
   updateProgress();
 }
 
+let lastLevel = null; // Globale Variable, um Levelwechsel zu erkennen
+
 function updateProgress() {
   const total = allWords.length;
   const remaining = pool.length;
@@ -190,50 +189,73 @@ function updateProgress() {
 
   const emojiEl = document.getElementById("progress-emoji");
   const textEl = document.getElementById("progress-text");
+  const container = document.getElementById("progress-container");
 
-  if (!emojiEl || !textEl) return;
+  if (!emojiEl || !textEl || !container) return;
 
   let message = "";
   let emoji = "";
+  let level = 0;
+  let bgColor = "";
 
   switch (true) {
     case learned === 0:
+      level = 0;
       emoji = "🌱";
       message = "Starte jetzt und erweitere deinen Wortschatz!";
+      bgColor = "linear-gradient(135deg, #e0f7fa, #b2ebf2)";
       break;
     case learned < 10:
+      level = 1;
       emoji = "👏";
       message = `Toller Anfang! Du kennst schon ${learned} Gebärden.`;
+      bgColor = "linear-gradient(135deg, #bbdefb, #90caf9)";
       break;
     case learned < 50:
+      level = 2;
       emoji = "🔥";
-      message = `Super! Dein Wortschatz wächst - ${learned} Gebärden schon gelernt.`;
+      message = `Super! Dein Wortschatz wächst – ${learned} Gebärden schon gelernt.`;
+      bgColor = "linear-gradient(135deg, #ffecb3, #ffe082)";
       break;
     case learned < 100:
+      level = 3;
       emoji = "🚀";
-      message = `Wow! ${learned} Gebärden - du wirst richtig sicher!`;
+      message = `Wow! ${learned} Gebärden – du wirst richtig sicher!`;
+      bgColor = "linear-gradient(135deg, #c8e6c9, #81c784)";
       break;
     case learned < 200:
+      level = 4;
       emoji = "🏆";
-      message = `Stark! ${learned} Gebärden - beeindruckender Fortschritt!`;
+      message = `Stark! ${learned} Gebärden – beeindruckender Fortschritt!`;
+      bgColor = "linear-gradient(135deg, #fff59d, #fff176)";
       break;
     case learned < 500:
+      level = 5;
       emoji = "🌟";
       message = `Unglaublich! Du hast ${learned} Gebärden gemeistert!`;
+      bgColor = "linear-gradient(135deg, #ce93d8, #ba68c8)";
       break;
     default:
+      level = 6;
       emoji = "🥇🤩";
       message = `Meisterhaft! ${learned} Gebärden – du bist ein Gebärden-Pro!`;
+      bgColor = "linear-gradient(135deg, #ffd54f, #ffb300)";
       break;
   }
 
-  // Text und Emoji aktualisieren
+  // Setze den Hintergrund
+  container.style.background = bgColor;
+
+  // Emoji & Text aktualisieren
   emojiEl.textContent = emoji;
   textEl.textContent = message;
 
-  // Animation kurz triggern
-  emojiEl.classList.add("animate");
-  setTimeout(() => emojiEl.classList.remove("animate"), 400);
+  // Animation nur bei Levelwechsel
+  if (lastLevel !== level) {
+    emojiEl.classList.add("animate");
+    setTimeout(() => emojiEl.classList.remove("animate"), 400);
+    lastLevel = level;
+  }
 }
 
 function resetProgress() {
