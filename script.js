@@ -182,10 +182,14 @@ function mark(action) {
 
 let lastLevel = null; // Globale Variable, um Levelwechsel zu erkennen
 
-function updateProgress() {
+function updateProgress(testLevelLearned) {
   const total = allWords.length;
   const remaining = pool.length;
-  const learned = total - remaining;
+  let learned = total - remaining;
+
+  if(testLevelLearned) {
+    learned = testLevelLearned;
+  }
 
   const emojiEl = document.getElementById("progress-emoji");
   const textEl = document.getElementById("progress-text");
@@ -225,7 +229,7 @@ function updateProgress() {
       break;
     case learned < 200:
       level = 4;
-      emoji = "🏆";
+      emoji = "💯";
       message = `Stark! ${learned} Gebärden - beeindruckender Fortschritt!`;
       bgColor = "linear-gradient(135deg, #fff59d, #fff176)";
       break;
@@ -237,7 +241,7 @@ function updateProgress() {
       break;
     default:
       level = 6;
-      emoji = "🥇🤩";
+      emoji = "🕺💃"; // 🥇🤩💯🕺💃🤟
       message = `Meisterhaft! ${learned} Gebärden - du bist ein Gebärden-Pro!`;
       bgColor = "linear-gradient(135deg, #ffb347, #ffcc33)"; // kräftiger Goldton
       break;
