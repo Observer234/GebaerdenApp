@@ -229,18 +229,30 @@ function updateProgress(testLevelLearned) {
       break;
     case learned < 200:
       level = 4;
+      emoji = "🦜";
+      message = `Unglaublich! ${learned} Gebärden - dein Wortschatz wird bunter!`;
+      bgColor = "linear-gradient(135deg, #fff59d, #fff176)";
+      break;
+    case learned < 300:
+      level = 5;
       emoji = "🦚";
-      message = `Stark! ${learned} Gebärden - beeindruckender Fortschritt!`;
+      message = `Stark! ${learned} Gebärden - du kannst stolz auf dich sein!`;
+      bgColor = "linear-gradient(135deg, #fff59d, #fff176)";
+      break;
+    case learned < 400:
+      level = 6;
+      emoji = "🦖";
+      message = `Grrrr ${learned} Gebärden - keine Angst, weiter so!`;
       bgColor = "linear-gradient(135deg, #fff59d, #fff176)";
       break;
     case learned < 500:
-      level = 5;
-      emoji = "💫";
-      message = `Unglaublich! Du hast ${learned} Gebärden gemeistert!`;
-      bgColor = "linear-gradient(135deg, #ce93d8, #ba68c8)";
+      level = 7;
+      emoji = "🦄";
+      message = `Mystisch! Du hast ${learned} Gebärden gemeistert!`;
+      bgColor = "linear-gradient(135deg, #d1a5d9ff, #ba68c8)";
       break;
     default:
-      level = 6;
+      level = 8;
       emoji = "🐦‍🔥"; // 🥇🤩💯🕺💃🤟🐦‍🔥🦚🤺🌟💫
       message = `Meisterhaft! ${learned} Gebärden - du bist ein Gebärden-Pro!`;
       bgColor = "linear-gradient(135deg, #fdd55cff, #bbdefb)"; // kräftiger Goldton
