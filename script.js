@@ -214,19 +214,19 @@ function updateProgress() {
     case learned < 50:
       level = 2;
       emoji = "🔥";
-      message = `Super! Dein Wortschatz wächst – ${learned} Gebärden schon gelernt.`;
+      message = `Super! Dein Wortschatz wächst - ${learned} Gebärden schon gelernt.`;
       bgColor = "linear-gradient(135deg, #ffecb3, #ffe082)";
       break;
     case learned < 100:
       level = 3;
       emoji = "🚀";
-      message = `Wow! ${learned} Gebärden – du wirst richtig sicher!`;
+      message = `Wow! ${learned} Gebärden - du wirst richtig sicher!`;
       bgColor = "linear-gradient(135deg, #c8e6c9, #81c784)";
       break;
     case learned < 200:
       level = 4;
       emoji = "🏆";
-      message = `Stark! ${learned} Gebärden – beeindruckender Fortschritt!`;
+      message = `Stark! ${learned} Gebärden - beeindruckender Fortschritt!`;
       bgColor = "linear-gradient(135deg, #fff59d, #fff176)";
       break;
     case learned < 500:
@@ -238,7 +238,7 @@ function updateProgress() {
     default:
       level = 6;
       emoji = "🥇🤩";
-      message = `Meisterhaft! ${learned} Gebärden – du bist ein Gebärden-Pro!`;
+      message = `Meisterhaft! ${learned} Gebärden - du bist ein Gebärden-Pro!`;
       bgColor = "linear-gradient(135deg, #ffb347, #ffcc33)"; // kräftiger Goldton
       break;
   }
