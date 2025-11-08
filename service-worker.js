@@ -1,4 +1,4 @@
-const CACHE_NAME = "vokabeltrainer-cache-v2"; // erhöhe Version bei Änderungen
+const CACHE_NAME = "vokabeltrainer-cache-v3"; // erhöhe Version bei Änderungen
 const OFFLINE_URLS = [
   "/", 
   "/style.css",
