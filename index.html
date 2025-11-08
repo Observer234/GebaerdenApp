@@ -1,203 +1,45 @@
 <!DOCTYPE html>
 <html lang="de">
   <head>
-    <!-- Project by Rudolf Hofmeister 2025 - rudolf.hofmeister@proton.me -->
+    <!-- Gebärden-Lern-App | Projekt von Rudolf Hofmeister 2025 -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Gebärden-Lern-App</title>
+
+    <!-- App-Icons -->
     <link rel="manifest" href="manifest.json" />
-    <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="16x16" href="favicon_16x16.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="favicon_32x32.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="favicon_180x180.png" />
     <meta name="theme-color" content="#87CEFA" />
 
-    <style>
-      body {
-        font-family: sans-serif;
-        text-align: center;
-        margin: 30px;
-        background: #fafafa;
-      }
-      #card {
-        font-size: 2em;
-        margin: 20px;
-        padding: 20px;
-        border-radius: 12px;
-        display: inline-block;
-        background: white;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      }
-      button {
-        font-size: 1.5em;
-        margin: 5px;
-        padding: 10px 20px;
-        border-radius: 10px;
-        border: none;
-        cursor: pointer;
-      }
-      button:hover {
-        opacity: 0.85;
-      }
-      #ok {
-        background: #b4ecb4;
-      }
-      #maybe {
-        background: #ffecb3;
-      }
-      #no {
-        background: #e3f1ff;
-      }
-      #solution {
-        background: #d0d0ff;
-        margin-bottom: 15px;
-      }
-
-      .link-button {
-        background: none;
-        border: none;
-        color: #007bff;
-        text-decoration: underline;
-        cursor: pointer;
-        font-size: 1em;
-        padding: 0;
-        margin-top: 1rem;
-      }
-
-      .link-button:active {
-        color: #0056b3;
-      }
-
-      .level-btn {
-        background: #eaf4ff;
-        border: none;
-        border-radius: 8px;
-        margin: 0 4px;
-        padding: 6px 12px;
-        font-size: 1rem;
-        cursor: pointer;
-        transition: all 0.2s ease;
-      }
-
-      .level-btn.active {
-        background: #74c0fc;
-        color: white;
-        font-weight: bold;
-      }
-
-      /* Modal Hintergrund */
-      .modal {
-        display: none;
-        position: fixed;
-        z-index: 100;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgba(0, 0, 0, 0.4);
-      }
-
-      /* Modal Inhalt */
-      .modal-content {
-        background-color: #fff;
-        margin: 10% auto;
-        padding: 20px;
-        border-radius: 16px;
-        width: 90%;
-        max-width: 400px;
-        text-align: left;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        font-size: 1em;
-        line-height: 1.5; /* mehr Abstand zwischen Zeilen */
-      }
-
-      .modal-content h2 {
-        text-align: center;
-        font-size: 1.4em; /* Titel leicht hervorheben */
-        margin-bottom: 0.5em;
-      }
-
-      .modal-content p {
-        margin: 0.8em 0;
-      }
-
-      .modal-content ul {
-        padding-left: 20px;
-      }
-
-      .close {
-        color: #aaa;
-        float: right;
-        font-size: 24px;
-        font-weight: bold;
-        cursor: pointer;
-      }
-
-      .close:hover {
-        color: #ff4d4d;
-      }
-
-      #progress-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        margin: 2em auto; /* gleichmäßiger Abstand oben/unten */
-        text-align: center;
-        border-radius: 1em;
-        padding: 1.2em 1.5em;
-        color: #222;
-        width: fit-content; /* nur so breit wie Inhalt */
-        max-width: 90%; /* mobilfreundlich */
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-        transition: background 0.8s ease, transform 0.3s ease;
-      }
-
-      #progress-emoji {
-        font-size: 2.8rem;
-        line-height: 1;
-        margin-bottom: 0.4em;
-        transition: transform 0.4s ease, opacity 0.4s ease;
-      }
-
-      #progress-emoji.animate {
-        transform: scale(1.3);
-        opacity: 0.9;
-      }
-
-      #progress-text {
-        font-size: 1.1rem;
-        max-width: 400px;
-        line-height: 1.4;
-      }
-    </style>
+    <link rel="stylesheet" href="style.css" />
   </head>
+
   <body>
     <h1>Gebärden-Lern-App</h1>
 
+    <!-- Fortschrittsanzeige -->
     <div id="progress-container">
       <div id="progress-emoji">🌱</div>
       <div id="progress-text">Starte jetzt und erweitere deinen Wortschatz!</div>
     </div>
 
+    <!-- Lernkarte -->
     <div id="card">Lade...</div>
     <br />
 
+    <!-- Interaktionsbuttons -->
     <button id="no" onclick="mark('x')">➡️</button>
     <button id="maybe" onclick="mark('?')">❓</button>
     <button id="ok" onclick="mark('ok')">✅</button>
 
-    <!-- <p id="progress" style="margin-top: 1rem; font-size: 0.9rem; color: #555">Noch ... Gebärden zu lernen</p> -->
+    <!-- Fortschritt & Anleitung -->
+    <div>
+      <p><button id="show-instructions" class="link-button">Anleitung</button></p>
+    </div>
 
-    <!-- <p id="streak" style="margin-top: 1rem; font-size: 1rem; color: #f76d00">🔥 Serie: 0 Tage</p> -->
-
-    <p></p>
-
-    <!-- <button onclick="resetProgress()" style="margin-top: 0.5rem; background: #74c0fc; color: white; font-size: 1rem; padding: 0.4rem 1rem; border: none; border-radius: 0.5rem">Fortschritt zurücksetzen</button> -->
-
-    <div><button id="show-instructions" class="link-button">Anleitung</button></div>
-
+    <!-- Anleitung Modal -->
     <div id="instructions-modal" class="modal">
       <div class="modal-content">
         <span class="close">&times;</span>
@@ -215,18 +57,9 @@
       </div>
     </div>
 
-    <!-- Vokabeln direkt im Dokument -->
-    <script id="vokabeln" type="text/plain">
-      TEST01
-      TEST02
-      TEST03
-    </script>
-
     <!-- App-Logik -->
     <script src="script.js"></script>
-
     <script>
-      // PWA-ServiceWorker registrieren (optional, serverfrei möglich über localhost oder https)
       if ("serviceWorker" in navigator) {
         navigator.serviceWorker.register("service-worker.js").catch(console.error);
       }
