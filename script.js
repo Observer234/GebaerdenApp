@@ -31,7 +31,7 @@ function startApp() {
   // Fortschritt aus localStorage laden
   learned = JSON.parse(localStorage.getItem("learnedWords") || "[]");
   pool = allWords.filter((w) => !learned.includes(w));
-  pool = shuffle(pool);
+  // pool = shuffle(pool);
 
   showWord();
   updateProgress();
@@ -180,7 +180,7 @@ function resetProgress() {
     localStorage.removeItem("learnedWords");
     learned = [];
     pool = allWords.filter((w) => !learned.includes(w));
-    pool = shuffle(pool);
+    // pool = shuffle(pool);
     updateProgress();
     showWord();
   }
