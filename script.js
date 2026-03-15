@@ -58,32 +58,59 @@ function showWord() {
 }
 
 // === Lösung anzeigen ===
-function showSolution() {
-  const baseURL = "https://gebaerden-archiv.at/search?q=";
-  const currentWord = pool[currentIndex];
-  const formattedWord = currentWord.trim().replace(/\s+/g, "+");
-  window.open(baseURL + formattedWord + "&tag=", "_blank");
-}
+// function showSolution() {
+//   const baseURL = "https://gebaerden-archiv.at/search?q=";
+//   const currentWord = pool[currentIndex];
+//   const formattedWord = currentWord.trim().replace(/\s+/g, "+");
+//   window.open(baseURL + formattedWord + "&tag=", "_blank");
+// }
 
-// === Klicklogik ===
+// // === Klicklogik ===
+// function mark(action) {
+//   const currentWord = pool[currentIndex];
+
+//   if (action === "ok") {
+//     learned.push(currentWord);
+//     localStorage.setItem("learnedWords", JSON.stringify(learned));
+//     pool.splice(currentIndex, 1); // Entfernt aktuelles Wort aus Pool
+//   } else if (action === "?") {
+//     showSolution();
+//   }
+
+//   if (pool.length === 0) {
+//     document.getElementById("card").textContent = "Alle Vokabeln gelernt 🎉";
+//   } else {
+//     currentIndex = (currentIndex + 1) % pool.length;
+//     showWord();
+//   }
+
+//   updateProgress();
+// }
+
+// === Lösung anzeigen NEU - ohne Shuffle ===
 function mark(action) {
   const currentWord = pool[currentIndex];
 
   if (action === "ok") {
     learned.push(currentWord);
     localStorage.setItem("learnedWords", JSON.stringify(learned));
-    pool.splice(currentIndex, 1); // Entfernt aktuelles Wort aus Pool
-  } else if (action === "?") {
+    pool.splice(currentIndex, 1); // Wort entfernen
+  } 
+  else if (action === "?") {
     showSolution();
   }
 
   if (pool.length === 0) {
     document.getElementById("card").textContent = "Alle Vokabeln gelernt 🎉";
-  } else {
-    currentIndex = (currentIndex + 1) % pool.length;
-    showWord();
+    return;
   }
 
+  // Falls letztes Wort entfernt wurde → Index zurücksetzen
+  if (currentIndex >= pool.length) {
+    currentIndex = 0;
+  }
+
+  showWord();
   updateProgress();
 }
 
