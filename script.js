@@ -58,12 +58,12 @@ function showWord() {
 }
 
 // === Lösung anzeigen ===
-// function showSolution() {
-//   const baseURL = "https://gebaerden-archiv.at/search?q=";
-//   const currentWord = pool[currentIndex];
-//   const formattedWord = currentWord.trim().replace(/\s+/g, "+");
-//   window.open(baseURL + formattedWord + "&tag=", "_blank");
-// }
+function showSolution() {
+  const baseURL = "https://gebaerden-archiv.at/search?q=";
+  const currentWord = pool[currentIndex];
+  const formattedWord = currentWord.trim().replace(/\s+/g, "+");
+  window.open(baseURL + formattedWord + "&tag=", "_blank");
+}
 
 // // === Klicklogik ===
 // function mark(action) {
