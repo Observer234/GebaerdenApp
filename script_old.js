@@ -1,8 +1,6 @@
 // === Google Sheet ID ===
 const sheetId = "1u4BzQWOe-sYXdl1-gr9IMC2LK1lL-2NSrzRCf2CGwKo";
 
-const BATCH_SIZE = 20;
-
 // === Google Sheet laden ===
 async function loadWordsFromSheet(sheetId) {
   const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json`;
@@ -10,20 +8,17 @@ async function loadWordsFromSheet(sheetId) {
   const text = await res.text();
   const json = JSON.parse(text.substr(47).slice(0, -2));
 
-  const allWords = json.table.rows
-    .map((r) => r.c[0]?.v)
-    .filter(Boolean);
+  // Nur erste Spalte (c[0]) jeder Zeile extrahieren
+  const allWords = json.table.rows.map((r) => r.c[0]?.v).filter(Boolean); // leere Zeilen entfernen
 
   return allWords;
 }
 
 let allWords = [];
 let pool = [];
-let reviewPool = [];
 let currentIndex = 0;
 let learned = [];
-let nextWordIndex = 0;
-let lastLevel = null;
+let lastLevel = null; // Für Animation bei Levelwechsel
 
 // === Start der App ===
 loadWordsFromSheet(sheetId).then((words) => {
@@ -33,95 +28,84 @@ loadWordsFromSheet(sheetId).then((words) => {
 });
 
 function startApp() {
-
+  // Fortschritt aus localStorage laden
   learned = JSON.parse(localStorage.getItem("learnedWords") || "[]");
-
-  // entferne bereits gelernte Wörter
-  allWords = allWords.filter((w) => !learned.includes(w));
-
-  loadNextBatch();
+  pool = allWords.filter((w) => !learned.includes(w));
+  // pool = shuffle(pool);
 
   showWord();
   updateProgress();
 }
 
-// === Neues Lernpaket laden ===
-function loadNextBatch() {
-
-  if (nextWordIndex >= allWords.length) return;
-
-  pool = allWords.slice(nextWordIndex, nextWordIndex + BATCH_SIZE);
-  nextWordIndex += BATCH_SIZE;
-
-  currentIndex = 0;
-}
+// === Hilfsfunktion: Array mischen ===
+// function shuffle(array) {
+//   for (let i = array.length - 1; i > 0; i--) {
+//     const j = Math.floor(Math.random() * (i + 1));
+//     [array[i], array[j]] = [array[j], array[i]];
+//   }
+//   return array;
+// }
 
 // === Wort anzeigen ===
 function showWord() {
-
   const wordElement = document.getElementById("card");
-
   if (pool.length === 0) {
-
-    if (reviewPool.length > 0) {
-
-      pool = reviewPool;
-      reviewPool = [];
-      currentIndex = 0;
-
-    } else {
-
-      loadNextBatch();
-
-      if (pool.length === 0) {
-        wordElement.textContent = "Alle Vokabeln gelernt 🎉";
-        return;
-      }
-    }
+    wordElement.textContent = "Alle Vokabeln gelernt 🎉";
+    return;
   }
-
   wordElement.textContent = pool[currentIndex];
   updateProgress();
 }
 
 // === Lösung anzeigen ===
 function showSolution() {
-
   const baseURL = "https://gebaerden-archiv.at/search?q=";
   const currentWord = pool[currentIndex];
   const formattedWord = currentWord.trim().replace(/\s+/g, "+");
-
   window.open(baseURL + formattedWord + "&tag=", "_blank");
 }
 
-// === Klicklogik ===
-function mark(action) {
+// // === Klicklogik ===
+// function mark(action) {
+//   const currentWord = pool[currentIndex];
 
+//   if (action === "ok") {
+//     learned.push(currentWord);
+//     localStorage.setItem("learnedWords", JSON.stringify(learned));
+//     pool.splice(currentIndex, 1); // Entfernt aktuelles Wort aus Pool
+//   } else if (action === "?") {
+//     showSolution();
+//   }
+
+//   if (pool.length === 0) {
+//     document.getElementById("card").textContent = "Alle Vokabeln gelernt 🎉";
+//   } else {
+//     currentIndex = (currentIndex + 1) % pool.length;
+//     showWord();
+//   }
+
+//   updateProgress();
+// }
+
+// === Lösung anzeigen NEU - ohne Shuffle ===
+function mark(action) {
   const currentWord = pool[currentIndex];
 
   if (action === "ok") {
-
     learned.push(currentWord);
-
     localStorage.setItem("learnedWords", JSON.stringify(learned));
-
-    pool.splice(currentIndex, 1);
-
+    pool.splice(currentIndex, 1); // Wort entfernen
   } 
   else if (action === "?") {
-
     showSolution();
-
-    reviewPool.push(currentWord);
-    pool.splice(currentIndex, 1);
-
-  } 
-  else if (action === "skip") {
-
-    reviewPool.push(currentWord);
-    pool.splice(currentIndex, 1);
   }
 
+  if (pool.length === 0) {
+    document.getElementById("card").textContent = "Alle Vokabeln gelernt 🎉";
+    return;
+  }
+
+  // Falls letztes Wort entfernt wurde → Index zurücksetzen
   if (currentIndex >= pool.length) {
     currentIndex = 0;
   }
@@ -132,14 +116,14 @@ function mark(action) {
 
 // === Fortschritt + Emoji-Level ===
 function updateProgress(testLevelLearned) {
-
-  const total = allWords.length + learned.length;
-  const learnedCount = learned.length;
+  const total = allWords.length;
+  const remaining = pool.length;
+  let learnedCount = total - remaining;
+  if (testLevelLearned) learnedCount = testLevelLearned;
 
   const emojiEl = document.getElementById("progress-emoji");
   const textEl = document.getElementById("progress-text");
   const container = document.getElementById("progress-container");
-
   if (!emojiEl || !textEl || !container) return;
 
   let message = "";
@@ -148,75 +132,68 @@ function updateProgress(testLevelLearned) {
   let bgColor = "";
 
   switch (true) {
-
     case learnedCount < 2:
       level = 0;
       emoji = "🌱";
       message = "Starte jetzt und erweitere deinen Wortschatz!";
-      bgColor = "linear-gradient(135deg,#e0f7fa,#b2ebf2)";
+      bgColor = "linear-gradient(135deg, #e0f7fa, #b2ebf2)";
       break;
-
     case learnedCount < 10:
       level = 1;
       emoji = "👏";
       message = `Toller Anfang! Du kennst schon ${learnedCount} Gebärden.`;
-      bgColor = "linear-gradient(135deg,#bbdefb,#90caf9)";
+      bgColor = "linear-gradient(135deg, #bbdefb, #90caf9)";
       break;
-
     case learnedCount < 50:
       level = 2;
       emoji = "🔥";
       message = `Super! Dein Wortschatz wächst – ${learnedCount} Gebärden gelernt.`;
-      bgColor = "linear-gradient(135deg,#ffecb3,#ffe082)";
+      bgColor = "linear-gradient(135deg, #ffecb3, #ffe082)";
       break;
-
     case learnedCount < 100:
       level = 3;
       emoji = "🚀";
       message = `Wow! ${learnedCount} Gebärden – du wirst richtig sicher!`;
-      bgColor = "linear-gradient(135deg,#c8e6c9,#81c784)";
+      bgColor = "linear-gradient(135deg, #c8e6c9, #81c784)";
       break;
-
     case learnedCount < 200:
       level = 4;
       emoji = "🦜";
       message = `${learnedCount} Gebärden – dein Wortschatz wird immer bunter!`;
-      bgColor = "linear-gradient(135deg,#fff59d,#fff176)";
+      bgColor = "linear-gradient(135deg, #fff59d, #fff176)";
       break;
-
     case learnedCount < 300:
       level = 5;
       emoji = "🦚";
       message = `Stark! ${learnedCount} Gebärden – du kannst stolz auf dich sein!`;
-      bgColor = "linear-gradient(135deg,#d1c4e9,#b39ddb)";
+      bgColor = "linear-gradient(135deg, #d1c4e9, #b39ddb)";
       break;
-
     case learnedCount < 400:
       level = 6;
       emoji = "🦖";
       message = `Grrr! ${learnedCount} Gebärden – du machst riesige Schritte!`;
-      bgColor = "linear-gradient(135deg,#ffccbc,#ffab91)";
+      bgColor = "linear-gradient(135deg, #ffccbc, #ffab91)";
       break;
-
     case learnedCount < 500:
       level = 7;
       emoji = "🦄";
       message = `Mystisch! Du hast ${learnedCount} Gebärden gemeistert!`;
-      bgColor = "linear-gradient(135deg,#c9f5d7,#98ccca)";
+      bgColor = "linear-gradient(135deg, #c9f5d7ff, #98cccaff)";
       break;
-
     default:
       level = 8;
       emoji = "🐦‍🔥";
       message = `Meisterhaft! ${learnedCount} Gebärden - du bist ein Gebärden-Pro!`;
-      bgColor = "linear-gradient(135deg,#fdd55c,#bbdefb)";
+      bgColor = "linear-gradient(135deg, #fdd55cff, #bbdefb)"; // kräftiger Goldton
       break;
   }
 
+  // Stil aktualisieren
   container.style.background = bgColor;
   emojiEl.textContent = emoji;
   textEl.textContent = message;
 
+  // Animation nur bei Levelwechsel
   if (lastLevel !== level) {
     emojiEl.classList.add("flash");
     setTimeout(() => emojiEl.classList.remove("flash"), 800);
@@ -226,16 +203,13 @@ function updateProgress(testLevelLearned) {
 
 // === Fortschritt zurücksetzen ===
 function resetProgress() {
-
   if (confirm("⚠️ Willst du deinen Fortschritt wirklich zurücksetzen? ⚠️")) {
-
     localStorage.removeItem("learnedWords");
-
     learned = [];
-    reviewPool = [];
-    nextWordIndex = 0;
-
-    startApp();
+    pool = allWords.filter((w) => !learned.includes(w));
+    // pool = shuffle(pool);
+    updateProgress();
+    showWord();
   }
 }
 
@@ -249,27 +223,23 @@ btn.onclick = (e) => {
   modal.style.display = "block";
   document.body.style.overflow = "hidden";
 };
-
 span.onclick = () => {
   modal.style.display = "none";
   document.body.style.overflow = "auto";
 };
-
 window.onclick = (event) => {
   if (event.target === modal) {
     modal.style.display = "none";
     document.body.style.overflow = "auto";
   }
 };
-
 btn.addEventListener("touchstart", (e) => {
   e.preventDefault();
   modal.style.display = "block";
 });
 
-// === Service Worker ===
+// === Optional: Service Worker ===
 if ("serviceWorker" in navigator) {
-
   navigator.serviceWorker
     .register("service-worker.js")
     .then(() => console.log("Service Worker registriert."))
