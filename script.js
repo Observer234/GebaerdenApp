@@ -36,47 +36,16 @@ function renderCourseFilters() {
     chip.className = "course-chip";
     chip.textContent = `${course.name} (${learnedCount} / ${total})`;
 
-    if(selectedCourses.includes(i)){
+    if (selectedCourses.includes(i)) {
       chip.classList.add("active");
     }
 
-    chip.onclick = () => toggleCourse(i);
+    chip.addEventListener("click", () => toggleCourse(i));
 
     container.appendChild(chip);
 
   });
-}
 
-function renderCourseFilters() {
-
-  const container = document.getElementById("course-filter");
-  container.innerHTML = "";
-
-  courses.forEach((course, i) => {
-
-    const start = course.start;
-    const end = course.end ?? allWords.length;
-
-    const total = end - start;
-
-    const learnedCount = allWords
-      .slice(start, end)
-      .filter(w => learned.includes(w)).length;
-
-    const chip = document.createElement("div");
-
-    chip.className = "course-chip";
-    chip.textContent = `${course.name} (${learnedCount} / ${total})`;
-
-    if(selectedCourses.includes(i)){
-      chip.classList.add("active");
-    }
-
-    chip.onclick = () => toggleCourse(i);
-
-    container.appendChild(chip);
-
-  });
 }
 
 function toggleCourse(index) {
