@@ -269,56 +269,56 @@ function updateProgress(testLevelLearned) {
     case learnedCount < 10:
       level = 1;
       emoji = "👏";
-      message = `Toller Anfang! Du kennst schon ${learnedCount} Gebärden.`;
+      message = `Toller Anfang! Es warten noch weitere Level Aufstiege auf Dich!`;
       bgColor = "linear-gradient(135deg,#bbdefb,#90caf9)";
       break;
 
     case learnedCount < 50:
       level = 2;
       emoji = "🔥";
-      message = `Super! Dein Wortschatz wächst – ${learnedCount} Gebärden gelernt.`;
+      message = `Super! Dein Wortschatz wächst.`;
       bgColor = "linear-gradient(135deg,#ffecb3,#ffe082)";
       break;
 
     case learnedCount < 100:
       level = 3;
       emoji = "🚀";
-      message = `Wow! ${learnedCount} Gebärden – du wirst richtig sicher!`;
+      message = `Wow! Du wirst richtig sicher!`;
       bgColor = "linear-gradient(135deg,#c8e6c9,#81c784)";
       break;
 
     case learnedCount < 200:
       level = 4;
       emoji = "🦜";
-      message = `${learnedCount} Gebärden – dein Wortschatz wird immer bunter!`;
+      message = `Dein Wortschatz wird immer bunter!`;
       bgColor = "linear-gradient(135deg,#fff59d,#fff176)";
       break;
 
     case learnedCount < 300:
       level = 5;
       emoji = "🦚";
-      message = `Stark! ${learnedCount} Gebärden – du kannst stolz auf dich sein!`;
+      message = `Stark! Du kannst stolz auf dich sein!`;
       bgColor = "linear-gradient(135deg,#d1c4e9,#b39ddb)";
       break;
 
     case learnedCount < 400:
       level = 6;
       emoji = "🦖";
-      message = `Grrr! ${learnedCount} Gebärden – du machst riesige Schritte!`;
+      message = `Grrr! Du machst riesige Schritte!`;
       bgColor = "linear-gradient(135deg,#ffccbc,#ffab91)";
       break;
 
     case learnedCount < 500:
       level = 7;
       emoji = "🦄";
-      message = `Mystisch! Du hast ${learnedCount} Gebärden gemeistert!`;
+      message = `Mystisch! Du zähmst das Einhorn`;
       bgColor = "linear-gradient(135deg,#c9f5d7,#98ccca)";
       break;
 
     default:
       level = 8;
       emoji = "🐦‍🔥";
-      message = `Meisterhaft! ${learnedCount} Gebärden - du bist ein Gebärden-Pro!`;
+      message = `Meisterhaft! Jetzt bist du ein wahrer Gebärden Phönix!`;
       bgColor = "linear-gradient(135deg,#fdd55c,#bbdefb)";
       break;
   }
@@ -342,10 +342,9 @@ function resetProgress() {
     localStorage.removeItem("learnedWords");
 
     learned = [];
-    reviewPool = [];
-    nextWordIndex = 0;
 
     startApp();
+
   }
 }
 
