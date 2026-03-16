@@ -8,8 +8,9 @@ const courses = [
   {name:"L2", start:220, end:525},
   {name:"L3", start:525, end:709},
   {name:"L4", start:709, end:971},
-  {name:"L5", start:971, end:1009},
-  {name:"L6", start:1009, end:null}
+  // {name:"L5", start:971, end:1009},
+  // {name:"L6", start:1009, end:null}
+  {name:"L5", start:971, end:null}
 ];
 
 let selectedCourses =
@@ -234,6 +235,9 @@ function mark(action) {
 
   showWord();
   updateProgress();
+
+  // ⭐ Kurszähler sofort aktualisieren
+  renderCourseFilters();
 }
 
 // === Fortschritt + Emoji-Level ===
