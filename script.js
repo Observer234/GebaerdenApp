@@ -105,9 +105,10 @@ let pool = [];
 let reviewPool = [];
 let currentIndex = 0;
 let learned = [];
-let nextWordIndex = 0;
+let nextWordIndex = parseInt(localStorage.getItem("nextWordIndex") || "0");
 let lastLevel = null;
 let allWordsActive = [];
+
 
 // === Start der App ===
 loadWordsFromSheet(sheetId).then((words) => {
@@ -160,6 +161,13 @@ function loadNextBatch() {
   );
 
   nextWordIndex += BATCH_SIZE;
+
+  // Batch-Fortschritt speichern
+  localStorage.setItem(
+    "nextWordIndex",
+    nextWordIndex
+  );
+
   currentIndex = 0;
 }
 
