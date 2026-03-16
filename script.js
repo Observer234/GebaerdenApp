@@ -3,6 +3,103 @@ const sheetId = "1u4BzQWOe-sYXdl1-gr9IMC2LK1lL-2NSrzRCf2CGwKo";
 
 const BATCH_SIZE = 20;
 
+const courses = [
+  {name:"L1", start:0, end:220},
+  {name:"L2", start:220, end:525},
+  {name:"L3", start:525, end:709},
+  {name:"L4", start:709, end:971},
+  {name:"L5", start:971, end:1009},
+  {name:"L6", start:1009, end:null}
+];
+
+let selectedCourses =
+JSON.parse(localStorage.getItem("selectedCourses") || "[0,1,2,3,4,5]");
+
+function renderCourseFilters() {
+
+  const container = document.getElementById("course-filter");
+  container.innerHTML = "";
+
+  courses.forEach((course, i) => {
+
+    const start = course.start;
+    const end = course.end ?? allWords.length;
+
+    const total = end - start;
+
+    const learnedCount = allWords
+      .slice(start, end)
+      .filter(w => learned.includes(w)).length;
+
+    const chip = document.createElement("div");
+
+    chip.className = "course-chip";
+    chip.textContent = `${course.name} (${learnedCount} / ${total})`;
+
+    if(selectedCourses.includes(i)){
+      chip.classList.add("active");
+    }
+
+    chip.onclick = () => toggleCourse(i);
+
+    container.appendChild(chip);
+
+  });
+}
+
+function renderCourseFilters() {
+
+  const container = document.getElementById("course-filter");
+  container.innerHTML = "";
+
+  courses.forEach((course, i) => {
+
+    const start = course.start;
+    const end = course.end ?? allWords.length;
+
+    const total = end - start;
+
+    const learnedCount = allWords
+      .slice(start, end)
+      .filter(w => learned.includes(w)).length;
+
+    const chip = document.createElement("div");
+
+    chip.className = "course-chip";
+    chip.textContent = `${course.name} (${learnedCount} / ${total})`;
+
+    if(selectedCourses.includes(i)){
+      chip.classList.add("active");
+    }
+
+    chip.onclick = () => toggleCourse(i);
+
+    container.appendChild(chip);
+
+  });
+}
+
+function toggleCourse(index) {
+
+  if(selectedCourses.includes(index)) {
+
+    selectedCourses = selectedCourses.filter(c => c !== index);
+
+  } else {
+
+    selectedCourses.push(index);
+
+  }
+
+  localStorage.setItem(
+    "selectedCourses",
+    JSON.stringify(selectedCourses)
+  );
+
+  renderCourseFilters();
+  startApp();
+}
+
 // === Google Sheet laden ===
 async function loadWordsFromSheet(sheetId) {
   const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json`;
@@ -24,6 +121,7 @@ let currentIndex = 0;
 let learned = [];
 let nextWordIndex = 0;
 let lastLevel = null;
+let allWordsActive = [];
 
 // === Start der App ===
 loadWordsFromSheet(sheetId).then((words) => {
@@ -34,13 +132,30 @@ loadWordsFromSheet(sheetId).then((words) => {
 
 function startApp() {
 
+  // Gelernte Wörter laden
   learned = JSON.parse(localStorage.getItem("learnedWords") || "[]");
 
-  // entferne bereits gelernte Wörter
-  allWords = allWords.filter((w) => !learned.includes(w));
+  // aktive Wörter anhand Kursfilter bestimmen
+  const activeWords = getActiveWords();
 
+  // nur noch nicht gelernte Wörter
+  const remainingWords = activeWords.filter(
+    (w) => !learned.includes(w)
+  );
+
+  // Reset der Batch-Logik
+  nextWordIndex = 0;
+  reviewPool = [];
+  currentIndex = 0;
+
+  // Quelle für Batch-System setzen
+  allWordsActive = remainingWords;
+
+  // erstes Paket laden
   loadNextBatch();
 
+  // UI aktualisieren
+  renderCourseFilters();
   showWord();
   updateProgress();
 }
@@ -48,11 +163,17 @@ function startApp() {
 // === Neues Lernpaket laden ===
 function loadNextBatch() {
 
-  if (nextWordIndex >= allWords.length) return;
+  if (nextWordIndex >= allWordsActive.length) {
+    pool = [];
+    return;
+  }
 
-  pool = allWords.slice(nextWordIndex, nextWordIndex + BATCH_SIZE);
+  pool = allWordsActive.slice(
+    nextWordIndex,
+    nextWordIndex + BATCH_SIZE
+  );
+
   nextWordIndex += BATCH_SIZE;
-
   currentIndex = 0;
 }
 
