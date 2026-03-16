@@ -48,6 +48,22 @@ function renderCourseFilters() {
 
 }
 
+function getActiveWords() {
+
+  let words = [];
+
+  selectedCourses.forEach(c => {
+
+    const start = courses[c].start;
+    const end = courses[c].end ?? allWords.length;
+
+    words = words.concat(allWords.slice(start, end));
+
+  });
+
+  return words;
+}
+
 function toggleCourse(index) {
 
   if(selectedCourses.includes(index)) {
