@@ -50,6 +50,7 @@ h1 {
 }
 
 /* === Lernkarte === */
+/* === Lernkarte === */
 #card {
   font-size: 2em;
   margin: 20px auto;
@@ -58,6 +59,28 @@ h1 {
   display: inline-block;
   background: white;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+  /* 🔥 NEU */
+  position: relative;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+/* 🔴 aktuelle Karte geht nach links raus */
+.card-exit {
+  transform: translateX(-60px);
+  opacity: 0;
+}
+
+/* 🔵 neue Karte startet rechts */
+.card-enter-start {
+  transform: translateX(60px);
+  opacity: 0;
+}
+
+/* 🟢 fährt in die Mitte */
+.card-enter {
+  transform: translateX(0);
+  opacity: 1;
 }
 
 /* === Buttons === */

@@ -12,8 +12,7 @@ const courses = [
   { name: "L6", index: 5 },
 ];
 
-let selectedCourses =
-  JSON.parse(localStorage.getItem("selectedCourses") || "[0,1,2,3,4,5]");
+let selectedCourses = JSON.parse(localStorage.getItem("selectedCourses") || "[0,1,2,3,4,5]");
 
 function renderCourseFilters() {
   const container = document.getElementById("course-filter");
@@ -170,36 +169,61 @@ function loadNextBatch() {
 
 // === Wort anzeigen ===
 function showWord() {
+
   const wordElement = document.getElementById("card");
 
-  // 🔥 NEU: Kein Kurs ausgewählt
-  if (selectedCourses.length === 0) {
-    wordElement.textContent = "Wähle ein Level";
-    return;
-  }
+  // 🔴 1. raus animieren
+  wordElement.classList.add("card-exit");
 
-  if (pool.length === 0) {
-    if (reviewPool.length > 0) {
-      pool = reviewPool;
-      reviewPool = [];
-      currentIndex = 0;
+  setTimeout(() => {
+
+    // ===== DEINE BESTEHENDE LOGIK =====
+    // 🔥 NEU: Kein Kurs ausgewählt
+    if (selectedCourses.length === 0) {
+      wordElement.textContent = "Wähle ein Level";
     } else {
-      loadNextBatch();
 
-      // 🔥 UNTERSCHEIDUNG: leer wegen "alles gelernt"
       if (pool.length === 0) {
-        if (allWordsActive.length === 0) {
-          wordElement.textContent = "Alle Vokabeln gelernt 🎉";
+
+        if (reviewPool.length > 0) {
+
+          pool = reviewPool;
+          reviewPool = [];
+          currentIndex = 0;
+
         } else {
-          wordElement.textContent = "Wähle ein Level";
+
+          loadNextBatch();
+
+          if (pool.length === 0) {
+
+            if (allWordsActive.length === 0) {
+              wordElement.textContent = "Alle Vokabeln gelernt 🎉";
+            } else {
+              wordElement.textContent = "Wähle ein Level";
+            }
+
+            wordElement.classList.remove("card-exit");
+            return;
+          }
         }
-
-        return;
       }
-    }
-  }
 
-  wordElement.textContent = pool[currentIndex];
+      wordElement.textContent = pool[currentIndex];
+    }
+
+    // 🔵 2. Reset + rechts positionieren
+    wordElement.classList.remove("card-exit");
+    wordElement.classList.add("card-enter-start");
+
+    // 🟢 3. rein animieren
+    requestAnimationFrame(() => {
+      wordElement.classList.add("card-enter");
+      wordElement.classList.remove("card-enter-start");
+    });
+
+  }, 250); // muss zur CSS transition passen
+
   updateProgress();
 }
 
@@ -405,16 +429,9 @@ if ("serviceWorker" in navigator) {
 }
 
 function corina() {
+  const keys = ["selectedCourses", "learnedWords", "nextWordIndex", "lastWord", "totalLearned"];
 
-  const keys = [
-    "selectedCourses",
-    "learnedWords",
-    "nextWordIndex",
-    "lastWord",
-    "totalLearned"
-  ];
-
-  keys.forEach(key => localStorage.removeItem(key));
+  keys.forEach((key) => localStorage.removeItem(key));
 
   resetProgress();
 
