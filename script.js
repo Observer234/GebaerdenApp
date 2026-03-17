@@ -9,11 +9,11 @@ const courses = [
   { name: "L3", index: 2 },
   { name: "L4", index: 3 },
   { name: "L5", index: 4 },
+  { name: "L6", index: 5 },
 ];
 
 let selectedCourses =
-  // JSON.parse(localStorage.getItem("selectedCourses") || "[0,1,2,3,4,5]");
-  JSON.parse(localStorage.getItem("selectedCourses") || "[0,1,2,3,4]");
+  JSON.parse(localStorage.getItem("selectedCourses") || "[0,1,2,3,4,5]");
 
 function renderCourseFilters() {
   const container = document.getElementById("course-filter");
