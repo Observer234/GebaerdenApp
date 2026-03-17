@@ -131,7 +131,7 @@ function startApp() {
   );
 
   // Reset der Batch-Logik
-  // nextWordIndex = 0;
+  nextWordIndex = 0;
   reviewPool = [];
   currentIndex = 0;
 
