@@ -403,3 +403,18 @@ if ("serviceWorker" in navigator) {
     .then(() => console.log("Service Worker registriert."))
     .catch(console.error);
 }
+
+function resetAppStorage() {
+
+  const keys = [
+    "selectedCourses",
+    "learnedWords",
+    "nextWordIndex",
+    "lastWord",
+    "totalLearned"
+  ];
+
+  keys.forEach(key => localStorage.removeItem(key));
+
+  console.log("✅ App LocalStorage wurde zurückgesetzt:", keys);
+}
