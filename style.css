@@ -183,3 +183,7 @@ button:hover {
   background:#64b5f6;
   color:white;
 }
+
+.course-chip {
+  transition: all 0.2s ease;
+}
