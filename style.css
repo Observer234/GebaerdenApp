@@ -173,7 +173,7 @@ button:hover {
 .course-chip {
   padding:6px 10px;
   border-radius:18px;
-  font-size:0.85em;
+  font-size:0.95em;
   background:#e3f2fd;
   cursor:pointer;
   user-select:none;
