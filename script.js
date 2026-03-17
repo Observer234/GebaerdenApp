@@ -68,19 +68,19 @@ function getActiveWords() {
 function toggleCourse(index) {
 
   if(selectedCourses.includes(index)) {
-
     selectedCourses = selectedCourses.filter(c => c !== index);
-
   } else {
-
     selectedCourses.push(index);
-
   }
 
   localStorage.setItem(
     "selectedCourses",
     JSON.stringify(selectedCourses)
   );
+
+  // 🔥 Reset beim Kurswechsel
+  nextWordIndex = 0;
+  localStorage.setItem("nextWordIndex", "0");
 
   renderCourseFilters();
   startApp();
@@ -119,29 +119,26 @@ loadWordsFromSheet(sheetId).then((words) => {
 
 function startApp() {
 
-  // Gelernte Wörter laden
   learned = JSON.parse(localStorage.getItem("learnedWords") || "[]");
 
-  // aktive Wörter anhand Kursfilter bestimmen
   const activeWords = getActiveWords();
 
-  // nur noch nicht gelernte Wörter
   const remainingWords = activeWords.filter(
     (w) => !learned.includes(w)
   );
 
-  // Reset der Batch-Logik
-  nextWordIndex = 0;
+  // 🔥 WICHTIG: Index validieren statt blind resetten
+  if (nextWordIndex >= remainingWords.length) {
+    nextWordIndex = 0;
+  }
+
   reviewPool = [];
   currentIndex = 0;
 
-  // Quelle für Batch-System setzen
   allWordsActive = remainingWords;
 
-  // erstes Paket laden
   loadNextBatch();
 
-  // UI aktualisieren
   renderCourseFilters();
   showWord();
   updateProgress();
@@ -251,7 +248,7 @@ function mark(action) {
 // === Fortschritt + Emoji-Level ===
 function updateProgress(testLevelLearned) {
 
-  const total = allWords.length + learned.length;
+  const total = allWords.length;
   const learnedCount = learned.length;
 
   const emojiEl = document.getElementById("progress-emoji");
