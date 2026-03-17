@@ -283,7 +283,7 @@ function updateProgress(testLevelLearned) {
     case learnedCount < 2:
       level = 0;
       emoji = "🌱";
-      message = "Starte jetzt und erweitere deinen Wortschatz!";
+      message = "Starte jetzt und werde Gebärden-Meister!";
       bgColor = "linear-gradient(135deg,#e0f7fa,#b2ebf2)";
       break;
 
@@ -296,15 +296,15 @@ function updateProgress(testLevelLearned) {
 
     case learnedCount < 50:
       level = 2;
-      emoji = "🔥";
-      message = `Super! Dein Wortschatz wächst.`;
+      emoji = "💪";
+      message = `Gebärdensprache ist eine Superkraft - man kann über Entfernungen, durch Glas und im Wasser kommunizieren!`;
       bgColor = "linear-gradient(135deg,#ffecb3,#ffe082)";
       break;
 
     case learnedCount < 100:
       level = 3;
       emoji = "🚀";
-      message = `Wow! Du wirst richtig sicher!`;
+      message = `Wow! Deine Fortschritt geht richtig ab!`;
       bgColor = "linear-gradient(135deg,#c8e6c9,#81c784)";
       break;
 
@@ -318,14 +318,14 @@ function updateProgress(testLevelLearned) {
     case learnedCount < 300:
       level = 5;
       emoji = "🦚";
-      message = `Stark! Du kannst stolz auf dich sein!`;
+      message = `Stark! Du kannst sooo stolz auf dich sein!`;
       bgColor = "linear-gradient(135deg,#d1c4e9,#b39ddb)";
       break;
 
     case learnedCount < 400:
       level = 6;
       emoji = "🦖";
-      message = `Grrr! Du machst riesige Schritte!`;
+      message = `Grrr! Du machst jetzt riesige Schritte!`;
       bgColor = "linear-gradient(135deg,#ffccbc,#ffab91)";
       break;
 
