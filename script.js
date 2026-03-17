@@ -219,7 +219,6 @@ function showSolution() {
 
 // === Klicklogik ===
 function mark(action) {
-
   const wordElement = document.getElementById("card");
   const currentWord = pool[currentIndex];
 
@@ -227,7 +226,6 @@ function mark(action) {
   wordElement.classList.add("card-exit");
 
   setTimeout(() => {
-
     // ===== DEINE BESTEHENDE LOGIK =====
     if (action === "ok") {
       learned.push(currentWord);
@@ -239,7 +237,6 @@ function mark(action) {
       localStorage.setItem("totalLearned", totalLearned);
 
       pool.splice(currentIndex, 1);
-
     } else if (action === "?") {
       showSolution();
 
@@ -270,19 +267,19 @@ function mark(action) {
 
     // 🔵 2. Neue Karte rechts vorbereiten
     wordElement.classList.remove("card-exit");
-    wordElement.classList.add("card-enter");
+    wordElement.classList.add("card-enter-start");
 
-    // 👉 jetzt neues Wort setzen
+    // 👉 neues Wort setzen
     showWord();
 
-    // 🟢 3. rein animieren
+    // 🟢 3. im nächsten Frame in die Mitte animieren
     requestAnimationFrame(() => {
-      wordElement.classList.remove("card-enter");
+      wordElement.classList.add("card-enter");
+      wordElement.classList.remove("card-enter-start");
     });
 
     updateProgress();
     renderCourseFilters();
-
   }, 250); // ⬅️ MUSS zu CSS transition passen
 }
 
