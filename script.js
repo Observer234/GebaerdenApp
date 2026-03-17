@@ -404,7 +404,7 @@ if ("serviceWorker" in navigator) {
     .catch(console.error);
 }
 
-function resetAppStorage() {
+function rudi() {
 
   const keys = [
     "selectedCourses",
@@ -415,6 +415,9 @@ function resetAppStorage() {
   ];
 
   keys.forEach(key => localStorage.removeItem(key));
+
+  resetProgress();
+  startApp();
 
   console.log("✅ App LocalStorage wurde zurückgesetzt:", keys);
 }
