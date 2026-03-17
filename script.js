@@ -14,7 +14,8 @@ const courses = [
 ];
 
 let selectedCourses =
-JSON.parse(localStorage.getItem("selectedCourses") || "[0,1,2,3,4,5]");
+// JSON.parse(localStorage.getItem("selectedCourses") || "[0,1,2,3,4,5]");
+JSON.parse(localStorage.getItem("selectedCourses") || "[0,1,2,3,4]");
 
 function renderCourseFilters() {
 
