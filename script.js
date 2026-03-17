@@ -12,7 +12,8 @@ const courses = [
   { name: "L6", index: 5 },
 ];
 
-let selectedCourses = JSON.parse(localStorage.getItem("selectedCourses") || "[0,1,2,3,4,5]");
+let selectedCourses =
+  JSON.parse(localStorage.getItem("selectedCourses") || "[0,1,2,3,4,5]");
 
 function renderCourseFilters() {
   const container = document.getElementById("course-filter");
@@ -171,40 +172,34 @@ function loadNextBatch() {
 function showWord() {
   const wordElement = document.getElementById("card");
 
-  // 🔴 1. raus animieren
-  wordElement.classList.add("card-exit");
+  // 🔥 NEU: Kein Kurs ausgewählt
+  if (selectedCourses.length === 0) {
+    wordElement.textContent = "Wähle ein Level";
+    return;
+  }
 
-  setTimeout(() => {
-    // 🔥 NEU: Kein Kurs ausgewählt
-    if (selectedCourses.length === 0) {
-      wordElement.textContent = "Wähle ein Level";
-      return;
-    }
+  if (pool.length === 0) {
+    if (reviewPool.length > 0) {
+      pool = reviewPool;
+      reviewPool = [];
+      currentIndex = 0;
+    } else {
+      loadNextBatch();
 
-    if (pool.length === 0) {
-      if (reviewPool.length > 0) {
-        pool = reviewPool;
-        reviewPool = [];
-        currentIndex = 0;
-      } else {
-        loadNextBatch();
-
-        // 🔥 UNTERSCHEIDUNG: leer wegen "alles gelernt"
-        if (pool.length === 0) {
-          if (allWordsActive.length === 0) {
-            wordElement.textContent = "Alle Vokabeln gelernt 🎉";
-          } else {
-            wordElement.textContent = "Wähle ein Level";
-          }
-
-          return;
+      // 🔥 UNTERSCHEIDUNG: leer wegen "alles gelernt"
+      if (pool.length === 0) {
+        if (allWordsActive.length === 0) {
+          wordElement.textContent = "Alle Vokabeln gelernt 🎉";
+        } else {
+          wordElement.textContent = "Wähle ein Level";
         }
+
+        return;
       }
     }
+  }
 
-    wordElement.textContent = pool[currentIndex];
-  }, 250);
-
+  wordElement.textContent = pool[currentIndex];
   updateProgress();
 }
 
@@ -410,9 +405,16 @@ if ("serviceWorker" in navigator) {
 }
 
 function corina() {
-  const keys = ["selectedCourses", "learnedWords", "nextWordIndex", "lastWord", "totalLearned"];
 
-  keys.forEach((key) => localStorage.removeItem(key));
+  const keys = [
+    "selectedCourses",
+    "learnedWords",
+    "nextWordIndex",
+    "lastWord",
+    "totalLearned"
+  ];
+
+  keys.forEach(key => localStorage.removeItem(key));
 
   resetProgress();
 
