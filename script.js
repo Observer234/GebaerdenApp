@@ -159,6 +159,12 @@ function loadNextBatch() {
 function showWord() {
   const wordElement = document.getElementById("card");
 
+  // 🔥 NEU: Kein Kurs ausgewählt
+  if (selectedCourses.length === 0) {
+    wordElement.textContent = "Wähle ein Level";
+    return;
+  }
+
   if (pool.length === 0) {
     if (reviewPool.length > 0) {
       pool = reviewPool;
@@ -167,8 +173,14 @@ function showWord() {
     } else {
       loadNextBatch();
 
+      // 🔥 UNTERSCHEIDUNG: leer wegen "alles gelernt"
       if (pool.length === 0) {
-        wordElement.textContent = "Alle Vokabeln gelernt 🎉";
+        if (allWordsActive.length === 0) {
+          wordElement.textContent = "Alle Vokabeln gelernt 🎉";
+        } else {
+          wordElement.textContent = "Wähle ein Level";
+        }
+
         return;
       }
     }
@@ -206,7 +218,7 @@ function mark(action) {
 
     reviewPool.push(currentWord);
     pool.splice(currentIndex, 1);
-  } 
+  }
 
   // Index korrigieren
   if (currentIndex >= pool.length) {
