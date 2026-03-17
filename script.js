@@ -219,68 +219,53 @@ function showSolution() {
 
 // === Klicklogik ===
 function mark(action) {
-  const wordElement = document.getElementById("card");
   const currentWord = pool[currentIndex];
 
-  // 🔴 1. Exit-Animation starten
-  wordElement.classList.add("card-exit");
+  if (action === "ok") {
+    learned.push(currentWord);
 
-  setTimeout(() => {
-    // ===== DEINE BESTEHENDE LOGIK =====
-    if (action === "ok") {
-      learned.push(currentWord);
+    localStorage.setItem("learnedWords", JSON.stringify(learned));
 
-      localStorage.setItem("learnedWords", JSON.stringify(learned));
+    // 🔥 NEU: Lifetime Counter erhöhen
+    totalLearned++;
+    localStorage.setItem("totalLearned", totalLearned);
 
-      // 🔥 Lifetime Counter erhöhen
-      totalLearned++;
-      localStorage.setItem("totalLearned", totalLearned);
+    pool.splice(currentIndex, 1);
+  } else if (action === "?") {
+    showSolution();
 
-      pool.splice(currentIndex, 1);
-    } else if (action === "?") {
-      showSolution();
+    reviewPool.push(currentWord);
+    pool.splice(currentIndex, 1);
+  }
 
-      reviewPool.push(currentWord);
-      pool.splice(currentIndex, 1);
-    }
+  // Index korrigieren
+  if (currentIndex >= pool.length) {
+    currentIndex = 0;
+  }
 
-    // Index korrigieren
-    if (currentIndex >= pool.length) {
-      currentIndex = 0;
-    }
+  // 🔥 NEU: Cursor sauber aktualisieren
+  if (pool.length > 0) {
+    lastWord = pool[currentIndex];
+  } else if (reviewPool.length > 0) {
+    // Falls Pool leer, aber Review kommt als nächstes
+    lastWord = reviewPool[0];
+  } else if (allWordsActive.length > 0) {
+    // Fallback: nächstes Batch vorberechnen
+    const nextIndex = Math.min(nextWordIndex, allWordsActive.length - 1);
+    lastWord = allWordsActive[nextIndex];
+  } else {
+    lastWord = null;
+  }
 
-    // 🔥 Cursor aktualisieren
-    if (pool.length > 0) {
-      lastWord = pool[currentIndex];
-    } else if (reviewPool.length > 0) {
-      lastWord = reviewPool[0];
-    } else if (allWordsActive.length > 0) {
-      const nextIndex = Math.min(nextWordIndex, allWordsActive.length - 1);
-      lastWord = allWordsActive[nextIndex];
-    } else {
-      lastWord = null;
-    }
+  if (lastWord) {
+    localStorage.setItem("lastWord", lastWord);
+  }
 
-    if (lastWord) {
-      localStorage.setItem("lastWord", lastWord);
-    }
+  showWord();
+  updateProgress();
 
-    // 🔵 2. Neue Karte rechts vorbereiten
-    wordElement.classList.remove("card-exit");
-    wordElement.classList.add("card-enter-start");
-
-    // 👉 neues Wort setzen
-    showWord();
-
-    // 🟢 3. im nächsten Frame in die Mitte animieren
-    requestAnimationFrame(() => {
-      wordElement.classList.add("card-enter");
-      wordElement.classList.remove("card-enter-start");
-    });
-
-    updateProgress();
-    renderCourseFilters();
-  }, 250); // ⬅️ MUSS zu CSS transition passen
+  // Kursanzeige aktualisieren
+  renderCourseFilters();
 }
 
 // === Fortschritt + Emoji-Level ===
