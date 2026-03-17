@@ -93,6 +93,7 @@ let currentIndex = 0;
 let learned = [];
 let nextWordIndex = parseInt(localStorage.getItem("nextWordIndex") || "0");
 let lastWord = localStorage.getItem("lastWord") || null;
+let totalLearned = parseInt(localStorage.getItem("totalLearned") || "0");
 let lastLevel = null;
 let allWordsActive = [];
 
@@ -195,16 +196,17 @@ function mark(action) {
 
     localStorage.setItem("learnedWords", JSON.stringify(learned));
 
+    // 🔥 NEU: Lifetime Counter erhöhen
+    totalLearned++;
+    localStorage.setItem("totalLearned", totalLearned);
+
     pool.splice(currentIndex, 1);
   } else if (action === "?") {
     showSolution();
 
     reviewPool.push(currentWord);
     pool.splice(currentIndex, 1);
-  } else if (action === "skip") {
-    reviewPool.push(currentWord);
-    pool.splice(currentIndex, 1);
-  }
+  } 
 
   // Index korrigieren
   if (currentIndex >= pool.length) {
@@ -239,7 +241,7 @@ function mark(action) {
 // === Fortschritt + Emoji-Level ===
 function updateProgress(testLevelLearned) {
   const total = allWords.length;
-  const learnedCount = learned.length;
+  const learnedCount = totalLearned;
 
   const emojiEl = document.getElementById("progress-emoji");
   const textEl = document.getElementById("progress-text");
