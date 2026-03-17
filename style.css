@@ -180,8 +180,13 @@ button:hover {
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
+.course-chip:active {
+  transform: scale(0.95);
+}
+
 .course-chip.active {
   background:#64b5f6;
   color:white;
-  transform: scale(0.95);
+  transform: scale(1.08);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
