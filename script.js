@@ -4,13 +4,11 @@ const sheetId = "1u4BzQWOe-sYXdl1-gr9IMC2LK1lL-2NSrzRCf2CGwKo";
 const BATCH_SIZE = 20;
 
 const courses = [
-  { name: "L1", start: 0, end: 220 },
-  { name: "L2", start: 220, end: 525 },
-  { name: "L3", start: 525, end: 709 },
-  { name: "L4", start: 709, end: 971 },
-  // {name:"L5", start:971, end:1009},
-  // {name:"L6", start:1009, end:null}
-  { name: "L5", start: 971, end: null },
+  { name: "L1", index: 0 },
+  { name: "L2", index: 1 },
+  { name: "L3", index: 2 },
+  { name: "L4", index: 3 },
+  { name: "L5", index: 4 },
 ];
 
 let selectedCourses =
@@ -22,12 +20,11 @@ function renderCourseFilters() {
   container.innerHTML = "";
 
   courses.forEach((course, i) => {
-    const start = course.start;
-    const end = course.end ?? allWords.length;
+    const levelWords = allWords[course.index] || [];
 
-    const total = end - start;
+    const total = levelWords.length;
 
-    const learnedCount = allWords.slice(start, end).filter((w) => learned.includes(w)).length;
+    const learnedCount = levelWords.filter((w) => learned.includes(w)).length;
 
     const chip = document.createElement("div");
 
@@ -48,10 +45,12 @@ function getActiveWords() {
   let words = [];
 
   selectedCourses.forEach((c) => {
-    const start = courses[c].start;
-    const end = courses[c].end ?? allWords.length;
+    const course = courses[c];
+    if (!course) return;
 
-    words = words.concat(allWords.slice(start, end));
+    const levelWords = allWords[course.index] || [];
+
+    words = words.concat(levelWords);
   });
 
   return words;
@@ -81,12 +80,26 @@ async function loadWordsFromSheet(sheetId) {
   const text = await res.text();
   const json = JSON.parse(text.substr(47).slice(0, -2));
 
-  const allWords = json.table.rows.map((r) => r.c[0]?.v).filter(Boolean);
+  const rows = json.table.rows;
 
-  return allWords;
+  const levels = {};
+
+  rows.forEach((row) => {
+    row.c.forEach((cell, colIndex) => {
+      if (!cell || !cell.v) return;
+
+      if (!levels[colIndex]) {
+        levels[colIndex] = [];
+      }
+
+      levels[colIndex].push(cell.v);
+    });
+  });
+
+  return levels; // 🔥 NEU: Objekt statt Array
 }
 
-let allWords = [];
+let allWords = {};
 let pool = [];
 let reviewPool = [];
 let currentIndex = 0;
