@@ -4,34 +4,30 @@ const sheetId = "1u4BzQWOe-sYXdl1-gr9IMC2LK1lL-2NSrzRCf2CGwKo";
 const BATCH_SIZE = 20;
 
 const courses = [
-  {name:"L1", start:0, end:220},
-  {name:"L2", start:220, end:525},
-  {name:"L3", start:525, end:709},
-  {name:"L4", start:709, end:971},
+  { name: "L1", start: 0, end: 220 },
+  { name: "L2", start: 220, end: 525 },
+  { name: "L3", start: 525, end: 709 },
+  { name: "L4", start: 709, end: 971 },
   // {name:"L5", start:971, end:1009},
   // {name:"L6", start:1009, end:null}
-  {name:"L5", start:971, end:null}
+  { name: "L5", start: 971, end: null },
 ];
 
 let selectedCourses =
-// JSON.parse(localStorage.getItem("selectedCourses") || "[0,1,2,3,4,5]");
-JSON.parse(localStorage.getItem("selectedCourses") || "[0,1,2,3,4]");
+  // JSON.parse(localStorage.getItem("selectedCourses") || "[0,1,2,3,4,5]");
+  JSON.parse(localStorage.getItem("selectedCourses") || "[0,1,2,3,4]");
 
 function renderCourseFilters() {
-
   const container = document.getElementById("course-filter");
   container.innerHTML = "";
 
   courses.forEach((course, i) => {
-
     const start = course.start;
     const end = course.end ?? allWords.length;
 
     const total = end - start;
 
-    const learnedCount = allWords
-      .slice(start, end)
-      .filter(w => learned.includes(w)).length;
+    const learnedCount = allWords.slice(start, end).filter((w) => learned.includes(w)).length;
 
     const chip = document.createElement("div");
 
@@ -45,39 +41,30 @@ function renderCourseFilters() {
     chip.addEventListener("click", () => toggleCourse(i));
 
     container.appendChild(chip);
-
   });
-
 }
 
 function getActiveWords() {
-
   let words = [];
 
-  selectedCourses.forEach(c => {
-
+  selectedCourses.forEach((c) => {
     const start = courses[c].start;
     const end = courses[c].end ?? allWords.length;
 
     words = words.concat(allWords.slice(start, end));
-
   });
 
   return words;
 }
 
 function toggleCourse(index) {
-
-  if(selectedCourses.includes(index)) {
-    selectedCourses = selectedCourses.filter(c => c !== index);
+  if (selectedCourses.includes(index)) {
+    selectedCourses = selectedCourses.filter((c) => c !== index);
   } else {
     selectedCourses.push(index);
   }
 
-  localStorage.setItem(
-    "selectedCourses",
-    JSON.stringify(selectedCourses)
-  );
+  localStorage.setItem("selectedCourses", JSON.stringify(selectedCourses));
 
   // 🔥 Reset beim Kurswechsel
   nextWordIndex = 0;
@@ -94,9 +81,7 @@ async function loadWordsFromSheet(sheetId) {
   const text = await res.text();
   const json = JSON.parse(text.substr(47).slice(0, -2));
 
-  const allWords = json.table.rows
-    .map((r) => r.c[0]?.v)
-    .filter(Boolean);
+  const allWords = json.table.rows.map((r) => r.c[0]?.v).filter(Boolean);
 
   return allWords;
 }
@@ -107,9 +92,9 @@ let reviewPool = [];
 let currentIndex = 0;
 let learned = [];
 let nextWordIndex = parseInt(localStorage.getItem("nextWordIndex") || "0");
+let lastWord = localStorage.getItem("lastWord") || null;
 let lastLevel = null;
 let allWordsActive = [];
-
 
 // === Start der App ===
 loadWordsFromSheet(sheetId).then((words) => {
@@ -119,24 +104,28 @@ loadWordsFromSheet(sheetId).then((words) => {
 });
 
 function startApp() {
-
   learned = JSON.parse(localStorage.getItem("learnedWords") || "[]");
 
   const activeWords = getActiveWords();
 
-  const remainingWords = activeWords.filter(
-    (w) => !learned.includes(w)
-  );
-
-  // 🔥 WICHTIG: Index validieren statt blind resetten
-  if (nextWordIndex >= remainingWords.length) {
-    nextWordIndex = 0;
-  }
+  const remainingWords = activeWords.filter((w) => !learned.includes(w));
 
   reviewPool = [];
   currentIndex = 0;
 
   allWordsActive = remainingWords;
+
+  // 🔥 NEU: Startposition über lastWord bestimmen
+  let startIndex = 0;
+
+  if (lastWord) {
+    const idx = remainingWords.indexOf(lastWord);
+    if (idx !== -1) {
+      startIndex = idx;
+    }
+  }
+
+  nextWordIndex = startIndex;
 
   loadNextBatch();
 
@@ -147,43 +136,34 @@ function startApp() {
 
 // === Neues Lernpaket laden ===
 function loadNextBatch() {
-
   if (nextWordIndex >= allWordsActive.length) {
     pool = [];
     return;
   }
 
-  pool = allWordsActive.slice(
-    nextWordIndex,
-    nextWordIndex + BATCH_SIZE
-  );
+  pool = allWordsActive.slice(nextWordIndex, nextWordIndex + BATCH_SIZE);
+
+  // 🔥 NEU: Cursor speichern (erstes Wort des Batches)
+  if (pool.length > 0) {
+    lastWord = pool[0];
+    localStorage.setItem("lastWord", lastWord);
+  }
 
   nextWordIndex += BATCH_SIZE;
-
-  // Batch-Fortschritt speichern
-  localStorage.setItem(
-    "nextWordIndex",
-    nextWordIndex
-  );
 
   currentIndex = 0;
 }
 
 // === Wort anzeigen ===
 function showWord() {
-
   const wordElement = document.getElementById("card");
 
   if (pool.length === 0) {
-
     if (reviewPool.length > 0) {
-
       pool = reviewPool;
       reviewPool = [];
       currentIndex = 0;
-
     } else {
-
       loadNextBatch();
 
       if (pool.length === 0) {
@@ -199,7 +179,6 @@ function showWord() {
 
 // === Lösung anzeigen ===
 function showSolution() {
-
   const baseURL = "https://gebaerden-archiv.at/search?q=";
   const currentWord = pool[currentIndex];
   const formattedWord = currentWord.trim().replace(/\s+/g, "+");
@@ -209,46 +188,56 @@ function showSolution() {
 
 // === Klicklogik ===
 function mark(action) {
-
   const currentWord = pool[currentIndex];
 
   if (action === "ok") {
-
     learned.push(currentWord);
 
     localStorage.setItem("learnedWords", JSON.stringify(learned));
 
     pool.splice(currentIndex, 1);
-
-  } 
-  else if (action === "?") {
-
+  } else if (action === "?") {
     showSolution();
 
     reviewPool.push(currentWord);
     pool.splice(currentIndex, 1);
-
-  } 
-  else if (action === "skip") {
-
+  } else if (action === "skip") {
     reviewPool.push(currentWord);
     pool.splice(currentIndex, 1);
   }
 
+  // Index korrigieren
   if (currentIndex >= pool.length) {
     currentIndex = 0;
+  }
+
+  // 🔥 NEU: Cursor sauber aktualisieren
+  if (pool.length > 0) {
+    lastWord = pool[currentIndex];
+  } else if (reviewPool.length > 0) {
+    // Falls Pool leer, aber Review kommt als nächstes
+    lastWord = reviewPool[0];
+  } else if (allWordsActive.length > 0) {
+    // Fallback: nächstes Batch vorberechnen
+    const nextIndex = Math.min(nextWordIndex, allWordsActive.length - 1);
+    lastWord = allWordsActive[nextIndex];
+  } else {
+    lastWord = null;
+  }
+
+  if (lastWord) {
+    localStorage.setItem("lastWord", lastWord);
   }
 
   showWord();
   updateProgress();
 
-  // ⭐ Kurszähler sofort aktualisieren
+  // Kursanzeige aktualisieren
   renderCourseFilters();
 }
 
 // === Fortschritt + Emoji-Level ===
 function updateProgress(testLevelLearned) {
-
   const total = allWords.length;
   const learnedCount = learned.length;
 
@@ -264,7 +253,6 @@ function updateProgress(testLevelLearned) {
   let bgColor = "";
 
   switch (true) {
-
     case learnedCount < 2:
       level = 0;
       emoji = "🌱";
@@ -342,15 +330,14 @@ function updateProgress(testLevelLearned) {
 
 // === Fortschritt zurücksetzen ===
 function resetProgress() {
-
   if (confirm("⚠️ Willst du deinen Fortschritt wirklich zurücksetzen? ⚠️")) {
-
     localStorage.removeItem("learnedWords");
+    localStorage.removeItem("lastWord"); // 🔥 wichtig
 
     learned = [];
+    lastWord = null;
 
     startApp();
-
   }
 }
 
@@ -384,7 +371,6 @@ btn.addEventListener("touchstart", (e) => {
 
 // === Service Worker ===
 if ("serviceWorker" in navigator) {
-
   navigator.serviceWorker
     .register("service-worker.js")
     .then(() => console.log("Service Worker registriert."))
