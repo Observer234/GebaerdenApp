@@ -304,7 +304,7 @@ function updateProgress(testLevelLearned) {
     case learnedCount < 100:
       level = 3;
       emoji = "🚀";
-      message = `Wow! Deine Fortschritt geht richtig ab!`;
+      message = `Wow! Dein Fortschritt geht ab wie eine Rakete!`;
       bgColor = "linear-gradient(135deg,#c8e6c9,#81c784)";
       break;
 
