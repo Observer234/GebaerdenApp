@@ -12,8 +12,7 @@ const courses = [
   { name: "L6", index: 5 },
 ];
 
-let selectedCourses =
-  JSON.parse(localStorage.getItem("selectedCourses") || "[0,1,2,3,4,5]");
+let selectedCourses = JSON.parse(localStorage.getItem("selectedCourses") || "[0,1,2,3,4,5]");
 
 function renderCourseFilters() {
   const container = document.getElementById("course-filter");
@@ -222,8 +221,10 @@ function mark(action) {
     localStorage.setItem("learnedWords", JSON.stringify(learned));
 
     // 🔥 NEU: Lifetime Counter erhöhen
-    totalLearned++;
-    localStorage.setItem("totalLearned", totalLearned);
+    if (pool.length !== 0 && selectedCourses.length !== 0) {
+      totalLearned++;
+      localStorage.setItem("totalLearned", totalLearned);
+    }
 
     pool.splice(currentIndex, 1);
   } else if (action === "?") {
@@ -405,16 +406,9 @@ if ("serviceWorker" in navigator) {
 }
 
 function corina() {
+  const keys = ["selectedCourses", "learnedWords", "nextWordIndex", "lastWord", "totalLearned"];
 
-  const keys = [
-    "selectedCourses",
-    "learnedWords",
-    "nextWordIndex",
-    "lastWord",
-    "totalLearned"
-  ];
-
-  keys.forEach(key => localStorage.removeItem(key));
+  keys.forEach((key) => localStorage.removeItem(key));
 
   resetProgress();
 
