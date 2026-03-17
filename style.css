@@ -177,10 +177,11 @@ button:hover {
   background:#e3f2fd;
   cursor:pointer;
   user-select:none;
-  transition: all 0.2s ease;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .course-chip.active {
   background:#64b5f6;
   color:white;
+  transform: scale(0.95);
 }
