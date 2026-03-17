@@ -404,7 +404,7 @@ if ("serviceWorker" in navigator) {
     .catch(console.error);
 }
 
-function rudi() {
+function corina() {
 
   const keys = [
     "selectedCourses",
