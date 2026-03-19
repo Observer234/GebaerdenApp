@@ -12,7 +12,16 @@ const courses = [
   { name: "L6", index: 5 },
 ];
 
-let selectedCourses = JSON.parse(localStorage.getItem("selectedCourses") || "[0,1,2,3,4,5]");
+// let selectedCourses = JSON.parse(localStorage.getItem("selectedCourses") || "[0,1,2,3,4,5]"); // erster Start = alle Kurse gewählt
+
+let selectCourses;
+const savedCourses = localStorage.getItem("selectedCourses");
+
+if (savedCourses !== null) {
+  selectedCourses = JSON.parse(savedCourses);
+} else {
+  selectedCourses = []; // 🔥 erster Start: nichts ausgewählt
+}
 
 function renderCourseFilters() {
   const container = document.getElementById("course-filter");
