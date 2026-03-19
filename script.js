@@ -185,9 +185,11 @@ function showWord() {
     } else {
       loadNextBatch();
 
-      // 🔥 UNTERSCHEIDUNG: leer wegen "alles gelernt"
       if (pool.length === 0) {
-        if (allWordsActive.length === 0) {
+        const activeWords = getActiveWords();
+        const remainingWords = activeWords.filter((w) => !learned.includes(w));
+        
+        if (remainingWords.length === 0) {
           wordElement.textContent = "Alle Vokabeln gelernt 🎉";
         } else {
           wordElement.textContent = "Wähle ein Level";
