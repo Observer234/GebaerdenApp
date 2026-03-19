@@ -353,6 +353,7 @@ function updateProgress(testLevelLearned) {
     emojiEl.classList.remove("animate");
     void emojiEl.offsetWidth; // reset
     emojiEl.classList.add("animate");
+    lastLevel = level;
   }
 }
 
