@@ -188,7 +188,7 @@ function showWord() {
       if (pool.length === 0) {
         const activeWords = getActiveWords();
         const remainingWords = activeWords.filter((w) => !learned.includes(w));
-        
+
         if (remainingWords.length === 0) {
           wordElement.textContent = "Alle Vokabeln gelernt 🎉";
         } else {
@@ -361,15 +361,17 @@ function updateProgress(testLevelLearned) {
 
 // === Fortschritt zurücksetzen ===
 function resetProgress() {
-  if (confirm("⚠️ Willst du deinen Fortschritt wirklich zurücksetzen? ⚠️")) {
-    localStorage.removeItem("learnedWords");
-    localStorage.removeItem("lastWord"); // 🔥 wichtig
+  // if (confirm("Willst du deinen Fortschritt wirklich zurücksetzen?")) {
+  //   // enter here if promt before reset
+  // }
 
-    learned = [];
-    lastWord = null;
+  localStorage.removeItem("learnedWords");
+  localStorage.removeItem("lastWord"); // 🔥 wichtig
 
-    startApp();
-  }
+  learned = [];
+  lastWord = null;
+
+  startApp();
 }
 
 // === Anleitung Modal ===
