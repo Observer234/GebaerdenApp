@@ -351,7 +351,7 @@ function updateProgress(testLevelLearned) {
 
   if (lastLevel !== level) {
     emojiEl.classList.add("animate");
-    setTimeout(() => emojiEl.classList.remove("animate"), 800);
+    setTimeout(() => emojiEl.classList.remove("animate"), 1200);
     lastLevel = level;
   }
 }
