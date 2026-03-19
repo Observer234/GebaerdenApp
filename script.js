@@ -350,9 +350,9 @@ function updateProgress(testLevelLearned) {
   textEl.textContent = message;
 
   if (lastLevel !== level) {
+    emojiEl.classList.remove("animate");
+    void emojiEl.offsetWidth; // reset
     emojiEl.classList.add("animate");
-    setTimeout(() => emojiEl.classList.remove("animate"), 800);
-    lastLevel = level;
   }
 }
 
