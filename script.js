@@ -298,7 +298,7 @@ function updateProgress(testLevelLearned) {
     case learnedCount < 50:
       level = 2;
       emoji = "💪";
-      message = `Gebärdensprache ist eine Superkraft - man kann über Entfernungen, durch Glas und im Wasser kommunizieren!`;
+      message = `Gebärdensprache ist eine Superpower - man kann in lauter Umgebung, durch schalldichtes Glas und im Wasser kommunizieren!`;
       bgColor = "linear-gradient(135deg,#ffecb3,#ffe082)";
       break;
 

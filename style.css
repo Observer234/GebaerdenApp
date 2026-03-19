@@ -50,7 +50,7 @@ h1 {
 }
 
 #progress-emoji.animate {
-  animation: emojiPulse 0.5s ease;
+  animation: emojiPulse 0.8s ease;
 }
 
 #progress-text {
