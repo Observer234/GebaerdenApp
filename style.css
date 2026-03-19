@@ -198,3 +198,24 @@ button:hover {
   transform: scale(1.08);
   box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
+
+.course-chip {
+  position: relative;
+}
+
+.course-order {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: #ff7043;
+  color: white;
+  font-size: 0.7em;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  pointer-events: none;
+}

@@ -30,8 +30,18 @@ function renderCourseFilters() {
     chip.className = "course-chip";
     chip.textContent = `${course.name} (${learnedCount} / ${total})`;
 
-    if (selectedCourses.includes(i)) {
+    // 🔥 Reihenfolge bestimmen (Klick-Reihenfolge)
+    const order = selectedCourses.indexOf(i);
+
+    if (order !== -1) {
       chip.classList.add("active");
+
+      // 🔵 Badge erstellen
+      const badge = document.createElement("span");
+      badge.className = "course-order";
+      badge.textContent = order + 1;
+
+      chip.appendChild(badge);
     }
 
     chip.addEventListener("click", () => toggleCourse(i));
