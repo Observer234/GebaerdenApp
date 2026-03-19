@@ -47,7 +47,7 @@ h1 {
 }
 
 #progress-emoji.animate {
-  animation: emojiWobble 0.6s ease 2;
+  animation: emojiWobble 0.6s ease;
 }
 
 #progress-text {
