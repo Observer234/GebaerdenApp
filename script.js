@@ -270,10 +270,12 @@ function showWord() {
       loadNextBatch();
 
       if (pool.length === 0) {
+        // 🔹 aktive Prüfung (aktueller Filter)
         const activeWords = getActiveWords();
-        const remainingWords = activeWords.filter((w) => !learned.includes(w));
+        const remainingActive = activeWords.filter((w) => !learned.includes(w));
 
-        if (remainingWords.length === 0) {
+        // 🔥 Entscheidung
+        if (allRemaining.length === 0) {
           wordElement.textContent = "Alle Vokabeln gelernt 🎉";
         } else {
           wordElement.textContent = "Wähle ein Level";
