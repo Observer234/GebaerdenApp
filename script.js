@@ -23,87 +23,29 @@ if (savedCourses !== null) {
   selectedCourses = []; // 🔥 erster Start: nichts ausgewählt
 }
 
-// function renderCourseFilters() {
-//   const container = document.getElementById("course-filter");
-//   container.innerHTML = "";
-
-//   courses.forEach((course, i) => {
-//     const levelWords = allWords[course.index] || [];
-
-//     const total = levelWords.length;
-
-//     const learnedCount = levelWords.filter((w) => learned.includes(w)).length;
-
-//     const chip = document.createElement("div");
-
-//     chip.className = "course-chip";
-//     chip.textContent = `${course.name} (${learnedCount} / ${total})`;
-
-//     // 🔥 Reihenfolge bestimmen (Klick-Reihenfolge)
-//     const order = selectedCourses.indexOf(i);
-
-//     if (order !== -1) {
-//       chip.classList.add("active");
-
-//       // 🔵 Badge erstellen
-//       const badge = document.createElement("span");
-//       badge.className = "course-order";
-//       badge.textContent = order + 1;
-
-//       chip.appendChild(badge);
-//     }
-
-//     chip.addEventListener("click", () => toggleCourse(i));
-
-//     container.appendChild(chip);
-//   });
-// }
-
 function renderCourseFilters() {
   const container = document.getElementById("course-filter");
   container.innerHTML = "";
 
-  // ❤️ FAVORITEN CHIP (Index = -1)
-  const favChip = document.createElement("div");
-  favChip.className = "course-chip";
-
-  const totalFav = favorites.length;
-  const learnedFav = favorites.filter((w) => learned.includes(w)).length;
-
-  favChip.textContent = `❤️ Favoriten (${learnedFav} / ${totalFav})`;
-
-  const favOrder = selectedCourses.indexOf(-1);
-
-  if (favOrder !== -1) {
-    favChip.classList.add("active");
-
-    const badge = document.createElement("span");
-    badge.className = "course-order";
-    badge.textContent = favOrder + 1;
-
-    favChip.appendChild(badge);
-  }
-
-  favChip.addEventListener("click", () => toggleCourse(-1));
-
-  container.appendChild(favChip);
-
-  // 🔹 NORMALE KURSE (unverändert)
   courses.forEach((course, i) => {
     const levelWords = allWords[course.index] || [];
 
     const total = levelWords.length;
+
     const learnedCount = levelWords.filter((w) => learned.includes(w)).length;
 
     const chip = document.createElement("div");
+
     chip.className = "course-chip";
     chip.textContent = `${course.name} (${learnedCount} / ${total})`;
 
+    // 🔥 Reihenfolge bestimmen (Klick-Reihenfolge)
     const order = selectedCourses.indexOf(i);
 
     if (order !== -1) {
       chip.classList.add("active");
 
+      // 🔵 Badge erstellen
       const badge = document.createElement("span");
       badge.className = "course-order";
       badge.textContent = order + 1;
@@ -121,12 +63,6 @@ function getActiveWords() {
   let words = [];
 
   selectedCourses.forEach((c) => {
-    // ❤️ Favoriten
-    if (c === -1) {
-      words = words.concat(favorites);
-      return;
-    }
-
     const course = courses[c];
     if (!course) return;
 
@@ -135,7 +71,7 @@ function getActiveWords() {
     words = words.concat(levelWords);
   });
 
-  return [...new Set(words)];
+  return words;
 }
 
 function toggleCourse(index) {
@@ -189,7 +125,6 @@ let learned = [];
 let nextWordIndex = parseInt(localStorage.getItem("nextWordIndex") || "0");
 let lastWord = localStorage.getItem("lastWord") || null;
 let totalLearned = parseInt(localStorage.getItem("totalLearned") || "0");
-let favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
 let lastLevel = null;
 let allWordsActive = [];
 
@@ -270,12 +205,10 @@ function showWord() {
       loadNextBatch();
 
       if (pool.length === 0) {
-        // 🔹 aktive Prüfung (aktueller Filter)
         const activeWords = getActiveWords();
-        const remainingActive = activeWords.filter((w) => !learned.includes(w));
+        const remainingWords = activeWords.filter((w) => !learned.includes(w));
 
-        // 🔥 Entscheidung
-        if (allRemaining.length === 0) {
+        if (remainingWords.length === 0) {
           wordElement.textContent = "Alle Vokabeln gelernt 🎉";
         } else {
           wordElement.textContent = "Wähle ein Level";
@@ -288,7 +221,6 @@ function showWord() {
 
   wordElement.textContent = pool[currentIndex];
   updateProgress();
-  updateFavoriteUI();
 }
 
 // === Lösung anzeigen ===
@@ -573,50 +505,6 @@ if ("serviceWorker" in navigator) {
     .register("service-worker.js")
     .then(() => console.log("Service Worker registriert."))
     .catch(console.error);
-}
-
-// Favoriten Logik
-document.getElementById("favorite-btn").addEventListener("click", toggleFavorite);
-
-function toggleFavorite() {
-  const currentWord = pool[currentIndex];
-
-  if (favorites.includes(currentWord)) {
-    favorites = favorites.filter((w) => w !== currentWord);
-  } else {
-    favorites.push(currentWord);
-  }
-
-  localStorage.setItem("favorites", JSON.stringify(favorites));
-  updateFavoriteUI();
-}
-
-function toggleFavorite() {
-  const currentWord = pool[currentIndex];
-
-  if (favorites.includes(currentWord)) {
-    favorites = favorites.filter((w) => w !== currentWord);
-  } else {
-    favorites.push(currentWord);
-  }
-
-  localStorage.setItem("favorites", JSON.stringify(favorites));
-  updateFavoriteUI();
-}
-
-function updateFavoriteUI() {
-  const btn = document.getElementById("favorite-btn");
-  const currentWord = pool[currentIndex];
-
-  if (!btn || !currentWord) return;
-
-  if (favorites.includes(currentWord)) {
-    btn.classList.add("active");
-    btn.textContent = "❤️";
-  } else {
-    btn.classList.remove("active");
-    btn.textContent = "🤍";
-  }
 }
 
 function corina() {
