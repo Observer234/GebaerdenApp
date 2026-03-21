@@ -63,6 +63,12 @@ function getActiveWords() {
   let words = [];
 
   selectedCourses.forEach((c) => {
+    // ❤️ Favoriten behandeln
+    if (c === "favorites") {
+      words = words.concat(favorites);
+      return;
+    }
+
     const course = courses[c];
     if (!course) return;
 
@@ -71,7 +77,7 @@ function getActiveWords() {
     words = words.concat(levelWords);
   });
 
-  return words;
+  return [...new Set(words)];
 }
 
 function toggleCourse(index) {
@@ -125,6 +131,7 @@ let learned = [];
 let nextWordIndex = parseInt(localStorage.getItem("nextWordIndex") || "0");
 let lastWord = localStorage.getItem("lastWord") || null;
 let totalLearned = parseInt(localStorage.getItem("totalLearned") || "0");
+let favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
 let lastLevel = null;
 let allWordsActive = [];
 
@@ -221,6 +228,7 @@ function showWord() {
 
   wordElement.textContent = pool[currentIndex];
   updateProgress();
+  updateFavoriteUI();
 }
 
 // === Lösung anzeigen ===
@@ -505,6 +513,50 @@ if ("serviceWorker" in navigator) {
     .register("service-worker.js")
     .then(() => console.log("Service Worker registriert."))
     .catch(console.error);
+}
+
+// Favoriten Logik
+document.getElementById("favorite-btn").addEventListener("click", toggleFavorite);
+
+function toggleFavorite() {
+  const currentWord = pool[currentIndex];
+
+  if (favorites.includes(currentWord)) {
+    favorites = favorites.filter((w) => w !== currentWord);
+  } else {
+    favorites.push(currentWord);
+  }
+
+  localStorage.setItem("favorites", JSON.stringify(favorites));
+  updateFavoriteUI();
+}
+
+function toggleFavorite() {
+  const currentWord = pool[currentIndex];
+
+  if (favorites.includes(currentWord)) {
+    favorites = favorites.filter((w) => w !== currentWord);
+  } else {
+    favorites.push(currentWord);
+  }
+
+  localStorage.setItem("favorites", JSON.stringify(favorites));
+  updateFavoriteUI();
+}
+
+function updateFavoriteUI() {
+  const btn = document.getElementById("favorite-btn");
+  const currentWord = pool[currentIndex];
+
+  if (!btn || !currentWord) return;
+
+  if (favorites.includes(currentWord)) {
+    btn.classList.add("active");
+    btn.textContent = "❤️";
+  } else {
+    btn.classList.remove("active");
+    btn.textContent = "🤍";
+  }
 }
 
 function corina() {
