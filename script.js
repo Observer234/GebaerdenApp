@@ -372,56 +372,56 @@ function updateProgress(testLevelLearned) {
       bgColor = "linear-gradient(135deg,#e1bee7,#ce93d8)";
       break;
 
-    case learnedCount < 900:
+    case learnedCount < 800:
       level = 10;
       emoji = "🕶️";
       message = `Coolness-Level erreicht. Du gebärdest schon fast im Schlaf.`;
       bgColor = "linear-gradient(135deg,#b3e5fc,#81d4fa)";
       break;
 
-    case learnedCount < 1100:
+    case learnedCount < 900:
       level = 11;
       emoji = "⚡";
       message = `Blitzschnell erkannt - du reagierst wie ein Profi!`;
       bgColor = "linear-gradient(135deg,#fff9c4,#fff59d)";
       break;
 
-    case learnedCount < 1300:
+    case learnedCount < 1000:
       level = 12;
       emoji = "🧙‍♂️";
       message = `Magisch! Deine Hände sprechen fließend.`;
       bgColor = "linear-gradient(135deg,#d1c4e9,#b39ddb)";
       break;
 
-    case learnedCount < 1600:
+    case learnedCount < 1200:
       level = 13;
       emoji = "🌍";
       message = `Du kannst dich jetzt mit der Welt verbinden - ohne Worte.`;
       bgColor = "linear-gradient(135deg,#c8e6c9,#81c784)";
       break;
 
-    case learnedCount < 2000:
+    case learnedCount < 1400:
       level = 14;
-      emoji = "🔥";
-      message = `Unaufhaltsam! Dein Flow ist jetzt auf einem neuen Level.`;
+      emoji = "🥁";
+      message = `Unaufhaltsam! Dein Wissen ist jetzt auf einem neuen Level.`;
       bgColor = "linear-gradient(135deg,#ffccbc,#ffab91)";
       break;
 
-    case learnedCount < 2500:
+    case learnedCount < 1600:
       level = 15;
       emoji = "👑";
       message = `Königlich! Du beherrschst die Gebärdensprache wie ein Champion.`;
       bgColor = "linear-gradient(135deg,#ffe082,#ffd54f)";
       break;
 
-    case learnedCount < 3000:
+    case learnedCount < 1800:
       level = 16;
       emoji = "🌀";
       message = `Du bist im Flow-Zustand - alles geht automatisch.`;
       bgColor = "linear-gradient(135deg,#b2ebf2,#80deea)";
       break;
 
-    case learnedCount < 4000:
+    case learnedCount < 2000:
       level = 17;
       emoji = "🌌";
       message = `Galaktisch! Dein Wissen geht weit über das Normale hinaus.`;
