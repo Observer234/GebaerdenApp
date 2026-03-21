@@ -23,37 +23,91 @@ if (savedCourses !== null) {
   selectedCourses = []; // 🔥 erster Start: nichts ausgewählt
 }
 
+// function renderCourseFilters() {
+//   const container = document.getElementById("course-filter");
+//   container.innerHTML = "";
+
+//   courses.forEach((course, i) => {
+//     const levelWords = allWords[course.index] || [];
+
+//     const total = levelWords.length;
+
+//     const learnedCount = levelWords.filter((w) => learned.includes(w)).length;
+
+//     const chip = document.createElement("div");
+
+//     chip.className = "course-chip";
+//     chip.textContent = `${course.name} (${learnedCount} / ${total})`;
+
+//     // 🔥 Reihenfolge bestimmen (Klick-Reihenfolge)
+//     const order = selectedCourses.indexOf(i);
+
+//     if (order !== -1) {
+//       chip.classList.add("active");
+
+//       // 🔵 Badge erstellen
+//       const badge = document.createElement("span");
+//       badge.className = "course-order";
+//       badge.textContent = order + 1;
+
+//       chip.appendChild(badge);
+//     }
+
+//     chip.addEventListener("click", () => toggleCourse(i));
+
+//     container.appendChild(chip);
+//   });
+// }
+
 function renderCourseFilters() {
   const container = document.getElementById("course-filter");
   container.innerHTML = "";
 
-  courses.forEach((course, i) => {
-    const levelWords = allWords[course.index] || [];
+  // ❤️ FAVORITEN CHIP (immer zuerst anzeigen)
+  const favChip = document.createElement("div");
+  favChip.className = "course-chip";
 
-    const total = levelWords.length;
+  const favIndex = selectedCourses.indexOf("favorites");
+  const favLabel = document.createElement("span");
+  favLabel.textContent = `❤️ Favoriten (${favorites.length})`;
 
-    const learnedCount = levelWords.filter((w) => learned.includes(w)).length;
+  favChip.appendChild(favLabel);
 
+  if (favIndex !== -1) {
+    favChip.classList.add("active");
+
+    const badge = document.createElement("span");
+    badge.className = "chip-order";
+    badge.textContent = favIndex + 1;
+    favChip.appendChild(badge);
+  }
+
+  favChip.addEventListener("click", () => toggleCourse("favorites"));
+
+  container.appendChild(favChip);
+
+  // 🔹 NORMALE LEVEL CHIPS
+  Object.keys(courses).forEach((key) => {
     const chip = document.createElement("div");
-
     chip.className = "course-chip";
-    chip.textContent = `${course.name} (${learnedCount} / ${total})`;
 
-    // 🔥 Reihenfolge bestimmen (Klick-Reihenfolge)
-    const order = selectedCourses.indexOf(i);
+    const index = selectedCourses.indexOf(key);
 
-    if (order !== -1) {
+    const label = document.createElement("span");
+    label.textContent = courses[key].name;
+
+    chip.appendChild(label);
+
+    if (index !== -1) {
       chip.classList.add("active");
 
-      // 🔵 Badge erstellen
       const badge = document.createElement("span");
-      badge.className = "course-order";
-      badge.textContent = order + 1;
-
+      badge.className = "chip-order";
+      badge.textContent = index + 1;
       chip.appendChild(badge);
     }
 
-    chip.addEventListener("click", () => toggleCourse(i));
+    chip.addEventListener("click", () => toggleCourse(key));
 
     container.appendChild(chip);
   });
