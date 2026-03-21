@@ -23,78 +23,37 @@ if (savedCourses !== null) {
   selectedCourses = []; // 🔥 erster Start: nichts ausgewählt
 }
 
-// function renderCourseFilters() {
-//   const container = document.getElementById("course-filter");
-//   container.innerHTML = "";
-
-//   courses.forEach((course, i) => {
-//     const levelWords = allWords[course.index] || [];
-
-//     const total = levelWords.length;
-
-//     const learnedCount = levelWords.filter((w) => learned.includes(w)).length;
-
-//     const chip = document.createElement("div");
-
-//     chip.className = "course-chip";
-//     chip.textContent = `${course.name} (${learnedCount} / ${total})`;
-
-//     // 🔥 Reihenfolge bestimmen (Klick-Reihenfolge)
-//     const order = selectedCourses.indexOf(i);
-
-//     if (order !== -1) {
-//       chip.classList.add("active");
-
-//       // 🔵 Badge erstellen
-//       const badge = document.createElement("span");
-//       badge.className = "course-order";
-//       badge.textContent = order + 1;
-
-//       chip.appendChild(badge);
-//     }
-
-//     chip.addEventListener("click", () => toggleCourse(i));
-
-//     container.appendChild(chip);
-//   });
-// }
-
 function renderCourseFilters() {
   const container = document.getElementById("course-filter");
   container.innerHTML = "";
 
-  // 🔹 Kombination aus Favoriten + normalen Kursen
-  const allCourseKeys = ["favorites", ...Object.keys(courses)];
+  courses.forEach((course, i) => {
+    const levelWords = allWords[course.index] || [];
 
-  allCourseKeys.forEach((key) => {
+    const total = levelWords.length;
+
+    const learnedCount = levelWords.filter((w) => learned.includes(w)).length;
+
     const chip = document.createElement("div");
+
     chip.className = "course-chip";
+    chip.textContent = `${course.name} (${learnedCount} / ${total})`;
 
-    const index = selectedCourses.indexOf(key);
+    // 🔥 Reihenfolge bestimmen (Klick-Reihenfolge)
+    const order = selectedCourses.indexOf(i);
 
-    // 🔹 Label bestimmen
-    let labelText = "";
-
-    if (key === "favorites") {
-      labelText = `❤️ (${favorites.length})`;
-    } else {
-      labelText = courses[key].name;
-    }
-
-    chip.textContent = labelText;
-
-    // 🔹 Aktiv + Reihenfolge
-    if (index !== -1) {
+    if (order !== -1) {
       chip.classList.add("active");
 
+      // 🔵 Badge erstellen
       const badge = document.createElement("span");
-      badge.className = "chip-order";
-      badge.textContent = index + 1;
+      badge.className = "course-order";
+      badge.textContent = order + 1;
+
       chip.appendChild(badge);
     }
 
-    // 🔹 Klick
-    chip.addEventListener("click", () => toggleCourse(key));
+    chip.addEventListener("click", () => toggleCourse(i));
 
     container.appendChild(chip);
   });
