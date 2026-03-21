@@ -63,41 +63,27 @@ function renderCourseFilters() {
   const container = document.getElementById("course-filter");
   container.innerHTML = "";
 
-  // ❤️ FAVORITEN CHIP (immer zuerst anzeigen)
-  const favChip = document.createElement("div");
-  favChip.className = "course-chip";
+  // 🔹 Kombination aus Favoriten + normalen Kursen
+  const allCourseKeys = ["favorites", ...Object.keys(courses)];
 
-  const favIndex = selectedCourses.indexOf("favorites");
-  const favLabel = document.createElement("span");
-  favLabel.textContent = `❤️ Favoriten (${favorites.length})`;
-
-  favChip.appendChild(favLabel);
-
-  if (favIndex !== -1) {
-    favChip.classList.add("active");
-
-    const badge = document.createElement("span");
-    badge.className = "chip-order";
-    badge.textContent = favIndex + 1;
-    favChip.appendChild(badge);
-  }
-
-  favChip.addEventListener("click", () => toggleCourse("favorites"));
-
-  container.appendChild(favChip);
-
-  // 🔹 NORMALE LEVEL CHIPS
-  Object.keys(courses).forEach((key) => {
+  allCourseKeys.forEach((key) => {
     const chip = document.createElement("div");
     chip.className = "course-chip";
 
     const index = selectedCourses.indexOf(key);
 
-    const label = document.createElement("span");
-    label.textContent = courses[key].name;
+    // 🔹 Label bestimmen
+    let labelText = "";
 
-    chip.appendChild(label);
+    if (key === "favorites") {
+      labelText = `❤️ (${favorites.length})`;
+    } else {
+      labelText = courses[key].name;
+    }
 
+    chip.textContent = labelText;
+
+    // 🔹 Aktiv + Reihenfolge
     if (index !== -1) {
       chip.classList.add("active");
 
@@ -107,6 +93,7 @@ function renderCourseFilters() {
       chip.appendChild(badge);
     }
 
+    // 🔹 Klick
     chip.addEventListener("click", () => toggleCourse(key));
 
     container.appendChild(chip);
