@@ -358,11 +358,81 @@ function updateProgress(testLevelLearned) {
       bgColor = "linear-gradient(135deg,#c9f5d7,#98ccca)";
       break;
 
-    default:
+    case learnedCount < 600:
       level = 8;
       emoji = "🐦‍🔥";
       message = `Meisterhaft! Jetzt bist du ein wahrer Gebärden Phönix!`;
       bgColor = "linear-gradient(135deg,#fdd55c,#bbdefb)";
+      break;
+
+    case learnedCount < 700:
+      level = 9;
+      emoji = "🧠";
+      message = `Dein Gehirn läuft jetzt im Gebärden-Modus!`;
+      bgColor = "linear-gradient(135deg,#e1bee7,#ce93d8)";
+      break;
+
+    case learnedCount < 900:
+      level = 10;
+      emoji = "🕶️";
+      message = `Coolness-Level erreicht. Du gebärdest schon fast im Schlaf.`;
+      bgColor = "linear-gradient(135deg,#b3e5fc,#81d4fa)";
+      break;
+
+    case learnedCount < 1100:
+      level = 11;
+      emoji = "⚡";
+      message = `Blitzschnell erkannt - du reagierst wie ein Profi!`;
+      bgColor = "linear-gradient(135deg,#fff9c4,#fff59d)";
+      break;
+
+    case learnedCount < 1300:
+      level = 12;
+      emoji = "🧙‍♂️";
+      message = `Magisch! Deine Hände sprechen fließend.`;
+      bgColor = "linear-gradient(135deg,#d1c4e9,#b39ddb)";
+      break;
+
+    case learnedCount < 1600:
+      level = 13;
+      emoji = "🌍";
+      message = `Du kannst dich jetzt mit der Welt verbinden - ohne Worte.`;
+      bgColor = "linear-gradient(135deg,#c8e6c9,#81c784)";
+      break;
+
+    case learnedCount < 2000:
+      level = 14;
+      emoji = "🔥";
+      message = `Unaufhaltsam! Dein Flow ist jetzt auf einem neuen Level.`;
+      bgColor = "linear-gradient(135deg,#ffccbc,#ffab91)";
+      break;
+
+    case learnedCount < 2500:
+      level = 15;
+      emoji = "👑";
+      message = `Königlich! Du beherrschst die Gebärdensprache wie ein Champion.`;
+      bgColor = "linear-gradient(135deg,#ffe082,#ffd54f)";
+      break;
+
+    case learnedCount < 3000:
+      level = 16;
+      emoji = "🌀";
+      message = `Du bist im Flow-Zustand - alles geht automatisch.`;
+      bgColor = "linear-gradient(135deg,#b2ebf2,#80deea)";
+      break;
+
+    case learnedCount < 4000:
+      level = 17;
+      emoji = "🌌";
+      message = `Galaktisch! Dein Wissen geht weit über das Normale hinaus.`;
+      bgColor = "linear-gradient(135deg,#cfd8dc,#90a4ae)";
+      break;
+
+    default:
+      level = 18;
+      emoji = "🧬";
+      message = `Du bist eins mit der Gebärdensprache geworden. Next Level: Legende.`;
+      bgColor = "linear-gradient(135deg,#f8bbd0,#f48fb1)";
       break;
   }
 
@@ -370,10 +440,18 @@ function updateProgress(testLevelLearned) {
   emojiEl.textContent = emoji;
   textEl.textContent = message;
 
+  // animation at level ups
   if (lastLevel !== level) {
+    // emoji wobble
     emojiEl.classList.remove("animate");
     void emojiEl.offsetWidth; // reset
     emojiEl.classList.add("animate");
+
+    // 🔥 Container Glow
+    container.classList.remove("level-up");
+    void container.offsetWidth;
+    container.classList.add("level-up");
+
     lastLevel = level;
   }
 }
